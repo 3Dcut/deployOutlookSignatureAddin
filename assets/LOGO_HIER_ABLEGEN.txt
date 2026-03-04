@@ -1,0 +1,2 @@
+Hier das acadon Logo als PNG ablegen (z.B. 200x50px).
+Wird in den Signatur-Templates per URL eingebettet.
