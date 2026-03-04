@@ -131,10 +131,33 @@ h2 {
 .btn-secondary {
   background: #e0e0e0;
   color: #333;
+  width: 100%;
 }
 
 .btn-secondary:hover {
   background: #d0d0d0;
+}
+
+/* Addon toggles */
+.addon-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+.addon-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: #5BC5F2;
+}
+
+.addon-row label {
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
 }
 
 /* Spinner */

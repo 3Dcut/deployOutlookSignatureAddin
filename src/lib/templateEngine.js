@@ -9,7 +9,8 @@ const PLACEHOLDER_MAP = {
   'JobTitle': 'jobTitle',
   'TelefonNumber': 'phone',
   'MailAddress': 'mail',
-  'Address': 'address'
+  'Address': 'address',
+  'Greeting': 'greeting'
 };
 
 function applyPlaceholders(template, userData) {

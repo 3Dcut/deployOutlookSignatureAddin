@@ -11,8 +11,10 @@ function _defaultPreferences(officeLocation) {
     overrides: {
       phone: null,
       jobTitle: null,
-      address: null
+      address: null,
+      greeting: null
     },
+    enabledAddons: [],
     lastUpdated: new Date().toISOString()
   };
 }
@@ -52,20 +54,22 @@ function clearPreferences(callback) {
   });
 }
 
-function mergeUserData(graphData, overrides) {
+function mergeUserData(graphData, overrides, language) {
   var merged = {
     givenName: graphData.givenName || '',
     surname: graphData.surname || '',
     jobTitle: graphData.jobTitle || '',
     phone: graphData.phone || '',
     mail: graphData.mail || '',
-    address: graphData.address || ''
+    address: graphData.address || '',
+    greeting: resolveGreeting(language || 'DE')
   };
 
   if (overrides) {
     if (overrides.phone) merged.phone = overrides.phone;
     if (overrides.jobTitle) merged.jobTitle = overrides.jobTitle;
     if (overrides.address) merged.address = overrides.address;
+    if (overrides.greeting) merged.greeting = overrides.greeting;
   }
 
   return merged;

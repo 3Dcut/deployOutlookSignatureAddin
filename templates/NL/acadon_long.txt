@@ -1,4 +1,4 @@
-﻿Met vriendelijke groeten, Kind regards,
+﻿@@Greeting@@
 
 @@FirstName@@ @@LastName@@
 @@JobTitle@@

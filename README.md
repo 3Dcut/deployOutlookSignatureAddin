@@ -26,8 +26,42 @@ deploy/
 └── README.md
 ```
 
-## Verwendung
+## GitHub Pages einrichten
 
-1. Dieses Verzeichnis als eigenes Git-Repo initialisieren.
-2. GitHub Pages aktivieren (Settings → Pages → Branch: main).
-3. Die URL (z.B. `https://org.github.io/outlook-signatur/`) in der `manifest.xml` des Add-ins eintragen.
+### 1. Neues Repo erstellen
+```bash
+cd deploy/
+git init
+git add .
+git commit -m "Initial commit - Outlook Signatur Add-in"
+```
+
+Auf GitHub ein **neues Public-Repo** erstellen (z.B. `outlook-signatur`), dann:
+```bash
+git remote add origin https://github.com/EUER-ORG/outlook-signatur.git
+git branch -M main
+git push -u origin main
+```
+
+### 2. GitHub Pages aktivieren
+1. Im Repo auf **Settings** → **Pages** (linke Seitenleiste).
+2. Unter **Source** → **Deploy from a branch** auswählen.
+3. **Branch**: `main`, **Folder**: `/ (root)` → **Save**.
+4. Nach ca. 1 Minute ist die Seite unter `https://EUER-ORG.github.io/outlook-signatur/` erreichbar.
+
+### 3. Manifest anpassen
+In `outlook-addin/manifest.xml` alle `https://localhost:3001` durch die GitHub Pages URL ersetzen:
+```
+https://localhost:3001  →  https://EUER-ORG.github.io/outlook-signatur
+```
+
+Alle zu ändernden Stellen sind im Manifest mit Kommentaren markiert (`<!-- ADDIN_BASE_URL -->`).
+
+### 4. Updates deployen
+Bei Änderungen am `deploy/`-Ordner einfach den Inhalt ins Pages-Repo kopieren und pushen:
+```bash
+git add .
+git commit -m "Update templates/addons/code"
+git push
+```
+GitHub Pages aktualisiert sich dann automatisch (ca. 30-60 Sekunden).

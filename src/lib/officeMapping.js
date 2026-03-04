@@ -36,3 +36,16 @@ function resolveLanguage(officeLocation) {
   const key = officeLocation.toLowerCase().trim();
   return OFFICE_TO_LANG[key] || 'DE';
 }
+
+const LANGUAGE_TO_GREETING = {
+  'DE': 'Mit freundlichen Grüßen',
+  'EN': 'Best regards',
+  'CH': 'Freundliche Grüsse',
+  'DK': 'Med venlig hilsen',
+  'FR': 'Cordialement',
+  'NL': 'Met vriendelijke groeten'
+};
+
+function resolveGreeting(language) {
+  return LANGUAGE_TO_GREETING[language] || LANGUAGE_TO_GREETING['DE'];
+}

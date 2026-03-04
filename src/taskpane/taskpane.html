@@ -64,6 +64,10 @@
           <label for="address">Adresse</label>
           <input type="text" id="address" readonly>
         </div>
+        <div class="field-row">
+          <label for="greeting">Grußformel</label>
+          <input type="text" id="greeting" placeholder="Mit freundlichen Grüßen">
+        </div>
       </section>
 
       <!-- Template selection -->
@@ -96,6 +100,12 @@
         </div>
       </section>
 
+      <!-- Optional building blocks -->
+      <section id="addons-section" class="form-section hidden">
+        <h2>Zusatz-Bausteine</h2>
+        <div id="addons-list"></div>
+      </section>
+
       <!-- Preview -->
       <section class="form-section">
         <h2>Vorschau</h2>
@@ -106,7 +116,8 @@
 
       <!-- Action buttons -->
       <div class="button-row">
-        <button id="save-btn" class="btn btn-primary">Einstellungen speichern</button>
+        <button id="insert-btn" class="btn btn-primary">Signatur einfügen</button>
+        <button id="save-btn" class="btn btn-secondary" style="margin-top: 8px;">Einstellungen speichern</button>
       </div>
 
       <!-- Status messages -->
@@ -119,6 +130,7 @@
   <script type="text/javascript" src="../lib/templateEngine.js"></script>
   <script type="text/javascript" src="../lib/officeMapping.js"></script>
   <script type="text/javascript" src="../lib/templateLoader.js"></script>
+  <script type="text/javascript" src="../lib/addonLoader.js"></script>
   <script type="text/javascript" src="../lib/settingsManager.js"></script>
   <script type="text/javascript" src="../lib/graphClient.js"></script>
   <script type="text/javascript" src="../lib/signatureComposer.js"></script>

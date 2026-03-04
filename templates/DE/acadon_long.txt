@@ -1,4 +1,4 @@
-﻿Mit freundlichen Grüßen
+﻿@@Greeting@@
 
 @@FirstName@@ @@LastName@@
 @@JobTitle@@

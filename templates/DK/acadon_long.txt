@@ -1,4 +1,4 @@
-﻿Med Venlig Hilsen / Best regards,
+﻿@@Greeting@@
 
 @@FirstName@@ @@LastName@@
 @@JobTitle@@
