@@ -1,4 +1,4 @@
-﻿@@Greeting@@
+﻿Cordialement,
 
 @@FirstName@@ @@LastName@@
 @@JobTitle@@

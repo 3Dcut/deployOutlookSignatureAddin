@@ -38,7 +38,7 @@ git commit -m "Initial commit - Outlook Signatur Add-in"
 
 Auf GitHub ein **neues Public-Repo** erstellen (z.B. `outlook-signatur`), dann:
 ```bash
-git remote add origin https://github.com/EUER-ORG/outlook-signatur.git
+git remote add origin https://github.com/3Dcut/deployOutlookSignatureAddin.git
 git branch -M main
 git push -u origin main
 ```
@@ -47,7 +47,7 @@ git push -u origin main
 1. Im Repo auf **Settings** → **Pages** (linke Seitenleiste).
 2. Unter **Source** → **Deploy from a branch** auswählen.
 3. **Branch**: `main`, **Folder**: `/ (root)` → **Save**.
-4. Nach ca. 1 Minute ist die Seite unter `https://EUER-ORG.github.io/outlook-signatur/` erreichbar.
+4. Nach ca. 1 Minute ist die Seite unter `https://3dcut.github.io/deployOutlookSignatureAddin/` erreichbar.
 
 ### 3. Manifest anpassen
 In `outlook-addin/manifest.xml` alle `https://localhost:3001` durch die GitHub Pages URL ersetzen:

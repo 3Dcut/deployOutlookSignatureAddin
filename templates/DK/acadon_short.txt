@@ -1,2 +1,2 @@
-﻿@@Greeting@@
+﻿Med Venlig Hilsen / Best regards,
 @@FirstName@@ @@LastName@@

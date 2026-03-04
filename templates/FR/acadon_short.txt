@@ -1,2 +1,2 @@
-﻿@@Greeting@@
+﻿Cordialement,
 @@FirstName@@ @@LastName@@
