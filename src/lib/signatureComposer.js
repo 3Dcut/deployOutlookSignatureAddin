@@ -1,1 +1,66 @@
-async function composeSignature(e,t,a,r,n){var o=await getTemplate(t,e,a),s=applyPlaceholders(o,r);if("htm"===a&&n&&n.length>0){var i=await composeAddonsHtml(n);if(i){var c=s.toLowerCase().lastIndexOf("</body>");-1!==c?s=s.substring(0,c)+i+"\n"+s.substring(c):s+="\n"+i}}return s}async function injectSignature(e,t){try{var a=await getUserData(),r=getPreferencesOrDefaults(a.officeLocation),n=mergeUserData(a,r.overrides),o=t?r.templateStyleReply:r.templateStyle,s=r.language,i=r.enabledAddons||[],c=await composeSignature(o,s,"htm",n,i);Office.context.mailbox.item.body.setSignatureAsync(c,{coercionType:Office.CoercionType.Html},function(t){t.status===Office.AsyncResultStatus.Failed&&console.error("setSignatureAsync failed:",t.error.message),e.completed()})}catch(t){console.error("Signature injection error:",t.message),e.completed()}}
+// signatureComposer.js - Block-based signature composition
+
+async function composeSignature(signatureObj, format, userData) {
+  // signatureObj: { id, name, blocks: [{blockId}, ...] }
+  // format: 'htm' or 'txt'
+  // userData: merged user data with overrides applied
+
+  var parts = [];
+
+  for (var i = 0; i < signatureObj.blocks.length; i++) {
+    var blockRef = signatureObj.blocks[i];
+    var blockHtml = await getBlockHtml(blockRef.blockId, format);
+
+    if (blockHtml) {
+      var processed = applyPlaceholders(blockHtml, userData);
+      parts.push(processed);
+    }
+  }
+
+  if (format === 'htm') {
+    return '<div style="font-family:\'Arial\',sans-serif;">\n' + parts.join('\n') + '\n</div>';
+  } else {
+    return parts.join('\n\n');
+  }
+}
+
+async function injectSignature(event, isReply) {
+  try {
+    // 1. Load user data and preferences
+    var userData = await getUserData();
+    var prefs = getPreferencesOrDefaults(userData.officeLocation);
+
+    // 2. Get the assigned signature
+    var assignmentKey = isReply ? 'reply' : 'newMessage';
+    var sigId = prefs.assignments[assignmentKey];
+    var signature = getSignatureById(prefs, sigId);
+
+    if (!signature) {
+      console.warn('No signature found for assignment:', assignmentKey);
+      event.completed();
+      return;
+    }
+
+    // 3. Merge user data with overrides and company info
+    var mergedData = mergeUserData(userData, prefs.overrides, prefs.language);
+
+    // 4. Compose the HTML signature from blocks
+    var htmlSignature = await composeSignature(signature, 'htm', mergedData);
+
+    // 5. Inject via setSignatureAsync
+    var item = Office.context.mailbox.item;
+    item.body.setSignatureAsync(
+      htmlSignature,
+      { coercionType: Office.CoercionType.Html },
+      function(asyncResult) {
+        if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+          console.error('setSignatureAsync failed:', asyncResult.error.message);
+        }
+        event.completed();
+      }
+    );
+  } catch (err) {
+    console.error('Signature injection error:', err.message);
+    event.completed();
+  }
+}

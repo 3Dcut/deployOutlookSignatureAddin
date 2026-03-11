@@ -66,9 +66,9 @@
         </div>
       </section>
 
-      <!-- Template selection -->
+      <!-- Signatures -->
       <section class="form-section">
-        <h2>Signatur-Einstellungen</h2>
+        <h2>Meine Signaturen</h2>
         <div class="field-row">
           <label for="language">Sprache</label>
           <select id="language">
@@ -81,26 +81,68 @@
           </select>
         </div>
         <div class="field-row">
-          <label for="templateStyle">Neue Nachrichten</label>
-          <select id="templateStyle">
-            <option value="acadon_long">Ausf&uuml;hrlich (lang)</option>
-            <option value="acadon_short">Kompakt (kurz)</option>
-          </select>
+          <label for="signatureSelect">Signatur</label>
+          <select id="signatureSelect"></select>
+        </div>
+        <div class="sig-actions">
+          <button id="new-sig-btn" class="btn btn-secondary btn-small" type="button">+ Neue Signatur</button>
+          <button id="delete-sig-btn" class="btn btn-danger btn-small" type="button">Signatur l&ouml;schen</button>
+        </div>
+
+        <div class="field-row" style="margin-top:10px;">
+          <label for="assignNewMessage">Neue Nachrichten</label>
+          <select id="assignNewMessage"></select>
         </div>
         <div class="field-row">
-          <label for="templateStyleReply">Antworten</label>
-          <select id="templateStyleReply">
-            <option value="acadon_short">Kompakt (kurz)</option>
-            <option value="acadon_long">Ausf&uuml;hrlich (lang)</option>
-          </select>
+          <label for="assignReply">Antworten</label>
+          <select id="assignReply"></select>
         </div>
       </section>
 
-      <!-- Optional building blocks -->
-      <section id="addons-section" class="form-section hidden">
-        <h2>Zusatz-Bausteine</h2>
-        <div id="addons-list"></div>
+      <!-- Signature Editor -->
+      <section id="sig-editor-section" class="form-section hidden">
+        <h2>Signatur bearbeiten</h2>
+        <div class="field-row">
+          <label for="sigName">Name</label>
+          <input type="text" id="sigName" placeholder="z.B. Standard Deutsch">
+        </div>
+        <div class="block-list-header">
+          <span class="block-list-label">Bausteine</span>
+        </div>
+        <div id="block-list" class="block-list"></div>
+        <button id="add-block-btn" class="btn btn-secondary btn-small" type="button">+ Baustein hinzuf&uuml;gen</button>
+
+        <!-- Block Picker (hidden by default) -->
+        <div id="block-picker" class="block-picker hidden">
+          <div class="field-row" style="margin-top:8px;">
+            <label for="pickerCategory">Kategorie</label>
+            <select id="pickerCategory">
+              <option value="all">Alle</option>
+              <option value="greeting">Gru&szlig;</option>
+              <option value="contact">Kontakt</option>
+              <option value="branding">Branding</option>
+              <option value="address">Adresse</option>
+              <option value="legal">Rechtliches</option>
+              <option value="banner">Banner</option>
+              <option value="zertifizierung">Zertifizierung</option>
+            </select>
+          </div>
+          <div id="picker-list" class="picker-list"></div>
+        </div>
       </section>
+
+      <!-- Preset Quick Start (shown when creating new signature) -->
+      <div id="preset-section" class="form-section hidden">
+        <h2>Von Vorlage starten</h2>
+        <div class="field-row">
+          <label for="presetSelect">Vorlage</label>
+          <select id="presetSelect"></select>
+        </div>
+        <div class="sig-actions">
+          <button id="apply-preset-btn" class="btn btn-secondary btn-small" type="button">Vorlage anwenden</button>
+          <button id="cancel-preset-btn" class="btn btn-secondary btn-small" type="button">Leer starten</button>
+        </div>
+      </div>
 
       <!-- Preview -->
       <section class="form-section">
@@ -112,7 +154,7 @@
 
       <!-- Action buttons -->
       <div class="button-row">
-        <button id="insert-btn" class="btn btn-primary">Signatur einfügen</button>
+        <button id="insert-btn" class="btn btn-primary">Signatur einf&uuml;gen</button>
         <button id="save-btn" class="btn btn-secondary" style="margin-top: 8px;">Einstellungen speichern</button>
       </div>
 
@@ -125,8 +167,7 @@
 
   <script type="text/javascript" src="../lib/templateEngine.js"></script>
   <script type="text/javascript" src="../lib/officeMapping.js"></script>
-  <script type="text/javascript" src="../lib/templateLoader.js"></script>
-  <script type="text/javascript" src="../lib/addonLoader.js"></script>
+  <script type="text/javascript" src="../lib/blockLoader.js"></script>
   <script type="text/javascript" src="../lib/settingsManager.js"></script>
   <script type="text/javascript" src="../lib/graphClient.js"></script>
   <script type="text/javascript" src="../lib/signatureComposer.js"></script>

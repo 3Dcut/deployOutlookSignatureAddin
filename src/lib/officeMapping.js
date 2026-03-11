@@ -1,1 +1,51 @@
-const OFFICE_ADDRESS_MAP={bergeijk:"Stokskesweg 9, 5571TJ Bergeijk",braunschweig:"Berliner Str. 52 j, 38104 Braunschweig, Germany",bremen:"Im Hollergrund 3, 28357 Bremen, Germany",dänemark:"Königsberger Str. 115, 47809 Krefeld, Germany",dortmund:"Rodenbergstraße 47, 44287 Dortmund, Germany",krefeld:"Königsberger Str. 115, 47809 Krefeld, Germany",schweiz:"acadon (Schweiz) GmbH, General-Guisan-Str. 6, CH-6300 Zug",österreich:"acadon GmbH, Am Euro Platz 2, AT-1120 Wien"},DEFAULT_ADDRESS="Königsberger Str. 115, 47809 Krefeld, Germany",OFFICE_TO_LANG={krefeld:"DE",braunschweig:"DE",bremen:"DE",dortmund:"DE",dänemark:"DK",bergeijk:"NL",schweiz:"CH",österreich:"DE"};function resolveAddress(e){if(!e)return DEFAULT_ADDRESS;const r=e.toLowerCase().trim();return OFFICE_ADDRESS_MAP[r]||DEFAULT_ADDRESS}function resolveLanguage(e){if(!e)return"DE";const r=e.toLowerCase().trim();return OFFICE_TO_LANG[r]||"DE"}
+// officeMapping.js - Office location to address and language mapping
+// Ported from browser-extension/lib/officeMapping.js + popup.js
+
+const OFFICE_ADDRESS_MAP = {
+  'bergeijk': 'Stokskesweg 9, 5571TJ Bergeijk',
+  'braunschweig': 'Berliner Str. 52 j, 38104 Braunschweig, Germany',
+  'bremen': 'Im Hollergrund 3, 28357 Bremen, Germany',
+  'dänemark': 'Königsberger Str. 115, 47809 Krefeld, Germany',
+  'dortmund': 'Rodenbergstraße 47, 44287 Dortmund, Germany',
+  'krefeld': 'Königsberger Str. 115, 47809 Krefeld, Germany',
+  'schweiz': 'acadon (Schweiz) GmbH, General-Guisan-Str. 6, CH-6300 Zug',
+  'österreich': 'acadon GmbH, Am Euro Platz 2, AT-1120 Wien'
+};
+
+const DEFAULT_ADDRESS = 'Königsberger Str. 115, 47809 Krefeld, Germany';
+
+const OFFICE_TO_LANG = {
+  'krefeld': 'DE',
+  'braunschweig': 'DE',
+  'bremen': 'DE',
+  'dortmund': 'DE',
+  'dänemark': 'DK',
+  'bergeijk': 'NL',
+  'schweiz': 'CH',
+  'österreich': 'DE'
+};
+
+function resolveAddress(officeLocation) {
+  if (!officeLocation) return DEFAULT_ADDRESS;
+  const key = officeLocation.toLowerCase().trim();
+  return OFFICE_ADDRESS_MAP[key] || DEFAULT_ADDRESS;
+}
+
+function resolveLanguage(officeLocation) {
+  if (!officeLocation) return 'DE';
+  const key = officeLocation.toLowerCase().trim();
+  return OFFICE_TO_LANG[key] || 'DE';
+}
+
+const COMPANY_INFO_MAP = {
+  'DE': { companyName: 'acadon AG', websiteUrl: 'www.acadon.net' },
+  'EN': { companyName: 'acadon AG', websiteUrl: 'www.acadon.net/en' },
+  'CH': { companyName: 'acadon GmbH', websiteUrl: 'www.acadon.net' },
+  'DK': { companyName: 'acadon AG', websiteUrl: 'www.acadon.net/dk' },
+  'FR': { companyName: 'acadon AG', websiteUrl: 'www.acadon.net/fr' },
+  'NL': { companyName: 'acadon B.V.', websiteUrl: 'www.acadon.net/nl' }
+};
+
+function resolveCompanyInfo(language) {
+  return COMPANY_INFO_MAP[language] || COMPANY_INFO_MAP['DE'];
+}
