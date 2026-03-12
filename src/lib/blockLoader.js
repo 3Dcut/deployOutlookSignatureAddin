@@ -47,6 +47,11 @@ async function getBlockRegistry() {
 }
 
 async function getBlockHtml(blockId, format) {
+  // Custom blocks are not in the registry - they are stored in roamingSettings
+  if (blockId.indexOf('custom_') === 0) {
+    return null; // Composer handles custom blocks from signatureObj.customBlocks
+  }
+
   var registry = await getBlockRegistry();
   var blockDef = _getBlockDef(registry, blockId);
   if (!blockDef) {

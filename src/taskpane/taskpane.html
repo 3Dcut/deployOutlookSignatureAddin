@@ -66,36 +66,49 @@
         </div>
       </section>
 
-      <!-- Signatures -->
+      <!-- Signature Management -->
       <section class="form-section">
-        <h2>Meine Signaturen</h2>
-        <div class="field-row">
-          <label for="language">Sprache</label>
-          <select id="language">
-            <option value="DE">Deutsch</option>
-            <option value="EN">English</option>
-            <option value="CH">Deutsch (CH)</option>
-            <option value="DK">Dansk</option>
-            <option value="FR">Fran&ccedil;ais</option>
-            <option value="NL">Nederlands</option>
-          </select>
-        </div>
-        <div class="field-row">
-          <label for="signatureSelect">Signatur</label>
-          <select id="signatureSelect"></select>
-        </div>
-        <div class="sig-actions">
-          <button id="new-sig-btn" class="btn btn-secondary btn-small" type="button">+ Neue Signatur</button>
-          <button id="delete-sig-btn" class="btn btn-danger btn-small" type="button">Signatur l&ouml;schen</button>
+        <h2>Signaturverwaltung</h2>
+
+        <!-- Filter row -->
+        <div class="filter-row">
+          <div class="filter-item">
+            <label for="filterLang">Sprache</label>
+            <select id="filterLang">
+              <option value="all">Alle</option>
+              <option value="DE">DE</option>
+              <option value="EN">EN</option>
+              <option value="CH">CH</option>
+              <option value="DK">DK</option>
+              <option value="FR">FR</option>
+              <option value="NL">NL</option>
+            </select>
+          </div>
+          <div class="filter-item">
+            <label for="filterType">Typ</label>
+            <select id="filterType">
+              <option value="all">Alle</option>
+              <option value="long">Lang</option>
+              <option value="short">Kurz</option>
+            </select>
+          </div>
         </div>
 
-        <div class="field-row" style="margin-top:10px;">
-          <label for="assignNewMessage">Neue Nachrichten</label>
-          <select id="assignNewMessage"></select>
-        </div>
-        <div class="field-row">
-          <label for="assignReply">Antworten</label>
-          <select id="assignReply"></select>
+        <!-- Signature list -->
+        <div id="sig-list" class="sig-list"></div>
+
+        <button id="new-sig-btn" class="btn btn-secondary btn-small" type="button" style="margin-top:8px;">+ Neue Signatur</button>
+
+        <!-- Assignments -->
+        <div style="margin-top:12px;">
+          <div class="field-row">
+            <label for="assignNewMessage">Neue Nachrichten</label>
+            <select id="assignNewMessage"></select>
+          </div>
+          <div class="field-row">
+            <label for="assignReply">Antworten</label>
+            <select id="assignReply"></select>
+          </div>
         </div>
       </section>
 
@@ -106,11 +119,34 @@
           <label for="sigName">Name</label>
           <input type="text" id="sigName" placeholder="z.B. Standard Deutsch">
         </div>
+        <div class="field-row">
+          <label for="sigLang">Sprache</label>
+          <select id="sigLang">
+            <option value="DE">Deutsch</option>
+            <option value="EN">English</option>
+            <option value="CH">Deutsch (CH)</option>
+            <option value="DK">Dansk</option>
+            <option value="FR">Fran&ccedil;ais</option>
+            <option value="NL">Nederlands</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <label for="sigType">Typ</label>
+          <select id="sigType">
+            <option value="long">Lang (ausf&uuml;hrlich)</option>
+            <option value="short">Kurz (kompakt)</option>
+          </select>
+        </div>
+
         <div class="block-list-header">
           <span class="block-list-label">Bausteine</span>
         </div>
         <div id="block-list" class="block-list"></div>
-        <button id="add-block-btn" class="btn btn-secondary btn-small" type="button">+ Baustein hinzuf&uuml;gen</button>
+        <div class="sig-actions">
+          <button id="add-block-btn" class="btn btn-secondary btn-small" type="button">+ Baustein</button>
+          <button id="add-custom-block-btn" class="btn btn-secondary btn-small" type="button">+ Eigener</button>
+          <button id="delete-sig-btn" class="btn btn-danger btn-small" type="button">L&ouml;schen</button>
+        </div>
 
         <!-- Block Picker (hidden by default) -->
         <div id="block-picker" class="block-picker hidden">
@@ -118,9 +154,9 @@
             <label for="pickerCategory">Kategorie</label>
             <select id="pickerCategory">
               <option value="all">Alle</option>
+              <option value="layout">Layout</option>
               <option value="greeting">Gru&szlig;</option>
               <option value="contact">Kontakt</option>
-              <option value="branding">Branding</option>
               <option value="address">Adresse</option>
               <option value="legal">Rechtliches</option>
               <option value="banner">Banner</option>
@@ -128,6 +164,23 @@
             </select>
           </div>
           <div id="picker-list" class="picker-list"></div>
+        </div>
+
+        <!-- Custom Block Creator (hidden by default) -->
+        <div id="custom-block-creator" class="custom-block-creator hidden">
+          <h3>Eigener Baustein</h3>
+          <div class="field-row">
+            <label for="customBlockName">Name</label>
+            <input type="text" id="customBlockName" placeholder="z.B. Mein Banner">
+          </div>
+          <div style="margin-top:6px;">
+            <label style="font-size:12px; color:#555;">HTML-Inhalt:</label>
+            <textarea id="customBlockHtml" rows="6" placeholder="<table>...</table>"></textarea>
+          </div>
+          <div class="sig-actions" style="margin-top:6px;">
+            <button id="create-custom-btn" class="btn btn-secondary btn-small" type="button">Erstellen</button>
+            <button id="cancel-custom-btn" class="btn btn-secondary btn-small" type="button">Abbrechen</button>
+          </div>
         </div>
       </section>
 

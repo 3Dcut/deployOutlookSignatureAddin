@@ -1,4 +1,4 @@
-// taskpane.js - Block-based signature management UI
+// taskpane.js - Block-based signature management UI (v4)
 
 var PANELS = ['loading', 'error-panel', 'main-form'];
 var currentUserData = null;
@@ -35,10 +35,8 @@ async function init() {
     document.getElementById('phone').value =
       (savedPrefs.overrides && savedPrefs.overrides.phone) || currentUserData.phone || '';
 
-    document.getElementById('language').value = savedPrefs.language;
-
     // Render signature UI
-    renderSignatureList(savedPrefs);
+    renderSignatureList();
     renderAssignmentDropdowns(savedPrefs);
 
     // Select first signature for editing
@@ -55,28 +53,55 @@ async function init() {
 
 // --- Signature List ---
 
-function renderSignatureList(prefs) {
-  var sel = document.getElementById('signatureSelect');
-  sel.innerHTML = '';
+function renderSignatureList() {
+  var container = document.getElementById('sig-list');
+  container.innerHTML = '';
 
-  if (!prefs.signatures || prefs.signatures.length === 0) {
-    var opt = document.createElement('option');
-    opt.value = '';
-    opt.textContent = '-- Keine Signaturen --';
-    sel.appendChild(opt);
+  if (!savedPrefs.signatures || savedPrefs.signatures.length === 0) {
+    container.innerHTML = '<div class="sig-list-empty">Keine Signaturen vorhanden</div>';
     return;
   }
 
-  prefs.signatures.forEach(function(sig) {
-    var opt = document.createElement('option');
-    opt.value = sig.id;
-    opt.textContent = sig.name;
-    sel.appendChild(opt);
+  // Get filter values
+  var langFilter = document.getElementById('filterLang').value;
+  var typeFilter = document.getElementById('filterType').value;
+
+  var filtered = savedPrefs.signatures.filter(function(sig) {
+    if (langFilter !== 'all' && sig.language !== langFilter) return false;
+    if (typeFilter !== 'all' && sig.type !== typeFilter) return false;
+    return true;
   });
 
-  if (editingSignatureId) {
-    sel.value = editingSignatureId;
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="sig-list-empty">Keine Signaturen f\u00fcr diesen Filter</div>';
+    return;
   }
+
+  filtered.forEach(function(sig) {
+    var item = document.createElement('div');
+    item.className = 'sig-list-item';
+    if (sig.id === editingSignatureId) {
+      item.className += ' active';
+    }
+    item.setAttribute('data-sig-id', sig.id);
+
+    var nameSpan = document.createElement('span');
+    nameSpan.className = 'sig-name';
+    nameSpan.textContent = sig.name;
+
+    var metaSpan = document.createElement('span');
+    metaSpan.className = 'sig-meta';
+    metaSpan.textContent = (sig.language || '?') + ' / ' + (sig.type === 'short' ? 'kurz' : 'lang');
+
+    item.appendChild(nameSpan);
+    item.appendChild(metaSpan);
+
+    item.addEventListener('click', function() {
+      selectSignatureForEditing(sig.id);
+    });
+
+    container.appendChild(item);
+  });
 }
 
 function renderAssignmentDropdowns(prefs) {
@@ -89,7 +114,7 @@ function renderAssignmentDropdowns(prefs) {
       prefs.signatures.forEach(function(sig) {
         var opt = document.createElement('option');
         opt.value = sig.id;
-        opt.textContent = sig.name;
+        opt.textContent = sig.name + ' (' + (sig.language || '?') + ')';
         sel.appendChild(opt);
       });
     }
@@ -112,11 +137,15 @@ function selectSignatureForEditing(sigId) {
     return;
   }
 
-  document.getElementById('signatureSelect').value = sigId;
   document.getElementById('sigName').value = sig.name;
+  document.getElementById('sigLang').value = sig.language || 'DE';
+  document.getElementById('sigType').value = sig.type || 'long';
   document.getElementById('sig-editor-section').classList.remove('hidden');
   document.getElementById('preset-section').classList.add('hidden');
+  document.getElementById('block-picker').classList.add('hidden');
+  document.getElementById('custom-block-creator').classList.add('hidden');
 
+  renderSignatureList();
   renderBlockList(sig);
   updatePreview();
 }
@@ -126,16 +155,30 @@ function renderBlockList(sig) {
   container.innerHTML = '';
 
   if (!sig || !sig.blocks || sig.blocks.length === 0) {
-    container.innerHTML = '<p class="info-text">Keine Bausteine. Klicke "+ Baustein hinzuf\u00fcgen".</p>';
+    container.innerHTML = '<p class="info-text">Keine Bausteine. Klicke "+ Baustein".</p>';
     return;
   }
 
   sig.blocks.forEach(function(blockRef, index) {
-    var blockDef = _getBlockDefFromRegistry(blockRef.blockId);
-    var name = blockDef ? blockDef.name : blockRef.blockId;
+    var blockId = blockRef.blockId;
+    var blockDef = _getBlockDefFromRegistry(blockId);
+    var isLayout = blockId === 'layout_logo_start' || blockId === 'layout_logo_end';
+    var isCustom = blockId.indexOf('custom_') === 0;
+
+    var name;
+    if (blockDef) {
+      name = blockDef.name;
+    } else if (isCustom) {
+      var customBlock = _getCustomBlockDef(sig, blockId);
+      name = customBlock ? customBlock.name : blockId;
+    } else {
+      name = blockId;
+    }
 
     var item = document.createElement('div');
     item.className = 'block-item';
+    if (isLayout) item.className += ' block-item-layout';
+    if (isCustom) item.className += ' block-item-custom';
 
     var controls = document.createElement('div');
     controls.className = 'block-controls';
@@ -163,6 +206,9 @@ function renderBlockList(sig) {
     if (blockDef && blockDef.language) {
       label.textContent += ' [' + blockDef.language + ']';
     }
+    if (isCustom) {
+      label.textContent += ' *';
+    }
 
     var btnRemove = document.createElement('button');
     btnRemove.className = 'btn-icon btn-remove';
@@ -175,6 +221,14 @@ function renderBlockList(sig) {
     item.appendChild(btnRemove);
     container.appendChild(item);
   });
+}
+
+function _getCustomBlockDef(sig, customBlockId) {
+  if (!sig || !sig.customBlocks) return null;
+  for (var i = 0; i < sig.customBlocks.length; i++) {
+    if (sig.customBlocks[i].id === customBlockId) return sig.customBlocks[i];
+  }
+  return null;
 }
 
 function handleMoveBlock(fromIndex, toIndex) {
@@ -206,6 +260,9 @@ function handleAddBlock(blockId) {
 
 function toggleBlockPicker() {
   var picker = document.getElementById('block-picker');
+  var customCreator = document.getElementById('custom-block-creator');
+  customCreator.classList.add('hidden');
+
   if (picker.classList.contains('hidden')) {
     picker.classList.remove('hidden');
     renderBlockPicker();
@@ -220,10 +277,17 @@ function renderBlockPicker() {
 
   if (!blockRegistry || !blockRegistry.blocks) return;
 
-  var lang = document.getElementById('language').value;
+  // Use the signature's language for filtering
+  var sig = editingSignatureId ? getSignatureById(savedPrefs, editingSignatureId) : null;
+  var lang = sig ? (sig.language || 'DE') : 'DE';
   var category = document.getElementById('pickerCategory').value;
 
   var availableBlocks = getBlocksForLanguage(blockRegistry, lang);
+
+  // Filter out deprecated blocks
+  availableBlocks = availableBlocks.filter(function(b) {
+    return !b.tags || b.tags.indexOf('deprecated') < 0;
+  });
 
   if (category !== 'all') {
     availableBlocks = availableBlocks.filter(function(b) {
@@ -269,23 +333,72 @@ function renderBlockPicker() {
   });
 }
 
+// --- Custom Block Creator ---
+
+function toggleCustomBlockCreator() {
+  var creator = document.getElementById('custom-block-creator');
+  var picker = document.getElementById('block-picker');
+  picker.classList.add('hidden');
+
+  if (creator.classList.contains('hidden')) {
+    creator.classList.remove('hidden');
+    document.getElementById('customBlockName').value = '';
+    document.getElementById('customBlockHtml').value = '';
+  } else {
+    creator.classList.add('hidden');
+  }
+}
+
+function createCustomBlock() {
+  if (!editingSignatureId) return;
+
+  var name = document.getElementById('customBlockName').value.trim();
+  var html = document.getElementById('customBlockHtml').value.trim();
+
+  if (!name) {
+    showErrorMessage('Bitte einen Namen eingeben.');
+    return;
+  }
+  if (!html) {
+    showErrorMessage('Bitte HTML-Inhalt eingeben.');
+    return;
+  }
+
+  var block = addCustomBlock(savedPrefs, editingSignatureId, {
+    name: name,
+    htmlContent: html
+  });
+
+  if (block) {
+    var sig = getSignatureById(savedPrefs, editingSignatureId);
+    renderBlockList(sig);
+    document.getElementById('custom-block-creator').classList.add('hidden');
+    updatePreview();
+  }
+}
+
 // --- Create / Delete Signatures ---
 
 function createNewSignature() {
+  var sig = editingSignatureId ? getSignatureById(savedPrefs, editingSignatureId) : null;
+  var defaultLang = sig ? sig.language : 'DE';
+
   var newId = 'sig_' + Date.now();
-  var sig = {
+  var newSig = {
     id: newId,
     name: 'Neue Signatur',
-    blocks: []
+    language: defaultLang,
+    type: 'long',
+    blocks: [],
+    customBlocks: []
   };
-  addSignature(savedPrefs, sig);
-  renderSignatureList(savedPrefs);
+  addSignature(savedPrefs, newSig);
+  renderSignatureList();
   renderAssignmentDropdowns(savedPrefs);
   selectSignatureForEditing(newId);
 
   // Show preset section for quick start
-  var lang = document.getElementById('language').value;
-  renderPresetOptions(lang);
+  renderPresetOptions(defaultLang);
   document.getElementById('preset-section').classList.remove('hidden');
 }
 
@@ -299,7 +412,7 @@ function deleteCurrentSignature() {
 
   removeSignature(savedPrefs, editingSignatureId);
   editingSignatureId = null;
-  renderSignatureList(savedPrefs);
+  renderSignatureList();
   renderAssignmentDropdowns(savedPrefs);
 
   if (savedPrefs.signatures && savedPrefs.signatures.length > 0) {
@@ -351,11 +464,15 @@ function applyPreset() {
   if (!sig) return;
 
   sig.name = preset.name;
+  sig.language = preset.language || sig.language;
+  sig.type = preset.type || sig.type;
   sig.blocks = preset.blockIds.map(function(id) { return { blockId: id }; });
 
   document.getElementById('sigName').value = sig.name;
+  document.getElementById('sigLang').value = sig.language;
+  document.getElementById('sigType').value = sig.type;
   renderBlockList(sig);
-  renderSignatureList(savedPrefs);
+  renderSignatureList();
   document.getElementById('preset-section').classList.add('hidden');
   updatePreview();
 }
@@ -379,8 +496,8 @@ async function updatePreview() {
     }
 
     var userData = _getCurrentFormData();
-    var language = document.getElementById('language').value;
-    var mergedData = mergeUserData(userData, null, language);
+    var sigLang = sig.language || 'DE';
+    var mergedData = mergeUserData(userData, null, sigLang);
 
     var html = await composeSignature(sig, 'htm', mergedData);
 
@@ -413,15 +530,20 @@ async function updatePreview() {
 // --- Save Preferences ---
 
 function savePreferencesFromForm() {
-  // Update signature name if editing
+  // Update signature attributes if editing
   if (editingSignatureId) {
     var nameInput = document.getElementById('sigName').value.trim();
+    var langInput = document.getElementById('sigLang').value;
+    var typeInput = document.getElementById('sigType').value;
+
     if (nameInput) {
-      updateSignature(savedPrefs, editingSignatureId, { name: nameInput });
+      updateSignature(savedPrefs, editingSignatureId, {
+        name: nameInput,
+        language: langInput,
+        type: typeInput
+      });
     }
   }
-
-  savedPrefs.language = document.getElementById('language').value;
 
   if (!savedPrefs.overrides) savedPrefs.overrides = {};
 
@@ -446,7 +568,7 @@ function savePreferencesFromForm() {
 
   savePreferences(savedPrefs, function(success) {
     if (success) {
-      renderSignatureList(savedPrefs);
+      renderSignatureList();
       renderAssignmentDropdowns(savedPrefs);
       showSuccessMessage('Einstellungen gespeichert. Die Signatur wird ab der n\u00e4chsten E-Mail aktualisiert.');
     } else {
@@ -471,8 +593,8 @@ async function insertSignatureFromTaskpane() {
     }
 
     var userData = _getCurrentFormData();
-    var language = document.getElementById('language').value;
-    var mergedData = mergeUserData(userData, null, language);
+    var sigLang = sig.language || 'DE';
+    var mergedData = mergeUserData(userData, null, sigLang);
 
     var htmlSignature = await composeSignature(sig, 'htm', mergedData);
 
@@ -552,20 +674,37 @@ function debouncedPreview() {
 
 // --- Event Listeners ---
 
-document.getElementById('language').addEventListener('change', function() {
-  renderBlockPicker();
-  updatePreview();
+// Filter controls
+document.getElementById('filterLang').addEventListener('change', renderSignatureList);
+document.getElementById('filterType').addEventListener('change', renderSignatureList);
+
+// Signature editor - language/type changes
+document.getElementById('sigLang').addEventListener('change', function() {
+  if (editingSignatureId) {
+    updateSignature(savedPrefs, editingSignatureId, { language: this.value });
+    renderSignatureList();
+    updatePreview();
+  }
 });
 
-document.getElementById('signatureSelect').addEventListener('change', function() {
-  selectSignatureForEditing(this.value);
+document.getElementById('sigType').addEventListener('change', function() {
+  if (editingSignatureId) {
+    updateSignature(savedPrefs, editingSignatureId, { type: this.value });
+    renderSignatureList();
+  }
 });
 
 document.getElementById('new-sig-btn').addEventListener('click', createNewSignature);
 document.getElementById('delete-sig-btn').addEventListener('click', deleteCurrentSignature);
 
 document.getElementById('add-block-btn').addEventListener('click', toggleBlockPicker);
+document.getElementById('add-custom-block-btn').addEventListener('click', toggleCustomBlockCreator);
 document.getElementById('pickerCategory').addEventListener('change', renderBlockPicker);
+
+document.getElementById('create-custom-btn').addEventListener('click', createCustomBlock);
+document.getElementById('cancel-custom-btn').addEventListener('click', function() {
+  document.getElementById('custom-block-creator').classList.add('hidden');
+});
 
 document.getElementById('apply-preset-btn').addEventListener('click', applyPreset);
 document.getElementById('cancel-preset-btn').addEventListener('click', cancelPreset);
@@ -573,7 +712,7 @@ document.getElementById('cancel-preset-btn').addEventListener('click', cancelPre
 document.getElementById('sigName').addEventListener('input', function() {
   if (editingSignatureId) {
     updateSignature(savedPrefs, editingSignatureId, { name: this.value.trim() });
-    renderSignatureList(savedPrefs);
+    renderSignatureList();
     renderAssignmentDropdowns(savedPrefs);
   }
 });

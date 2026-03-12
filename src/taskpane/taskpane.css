@@ -35,6 +35,13 @@ h2 {
   margin-bottom: 8px;
 }
 
+h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 6px;
+}
+
 .hidden {
   display: none !important;
 }
@@ -160,6 +167,87 @@ h2 {
   margin-top: 6px;
 }
 
+/* Filter row */
+.filter-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.filter-item label {
+  font-size: 11px;
+  color: #666;
+  flex-shrink: 0;
+}
+
+.filter-item select {
+  flex: 1;
+  padding: 3px 6px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+/* Signature List */
+.sig-list {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.sig-list-item {
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sig-list-item:last-child {
+  border-bottom: none;
+}
+
+.sig-list-item:hover {
+  background: #f5f9fc;
+}
+
+.sig-list-item.active {
+  background: #e8f4fc;
+  font-weight: 600;
+  border-left: 3px solid #5bc5f2;
+}
+
+.sig-list-item .sig-name {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sig-list-item .sig-meta {
+  font-size: 10px;
+  color: #999;
+  flex-shrink: 0;
+}
+
+.sig-list-empty {
+  padding: 12px;
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+}
+
 /* Spinner */
 .spinner {
   width: 24px;
@@ -182,7 +270,7 @@ h2 {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   padding: 8px;
-  max-height: 350px;
+  max-height: 400px;
   overflow: auto;
   background: #fafafa;
 }
@@ -219,6 +307,20 @@ h2 {
 
 .block-item:last-child {
   border-bottom: none;
+}
+
+.block-item-layout {
+  background: #e8f4fc;
+  padding: 4px 4px;
+  border-radius: 3px;
+  margin: 1px 0;
+}
+
+.block-item-custom {
+  background: #f0f8e8;
+  padding: 4px 4px;
+  border-radius: 3px;
+  margin: 1px 0;
 }
 
 .block-controls {
@@ -337,4 +439,29 @@ h2 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Custom Block Creator */
+.custom-block-creator {
+  margin-top: 8px;
+  padding: 10px;
+  background: #f0f8e8;
+  border: 1px solid #c8e6b8;
+  border-radius: 4px;
+}
+
+.custom-block-creator textarea {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: "Consolas", "Courier New", monospace;
+  resize: vertical;
+  margin-top: 4px;
+}
+
+.custom-block-creator textarea:focus {
+  outline: none;
+  border-color: #5bc5f2;
 }

@@ -11,7 +11,8 @@ const PLACEHOLDER_MAP = {
   'MailAddress': 'mail',
   'Address': 'address',
   'CompanyName': 'companyName',
-  'WebsiteUrl': 'websiteUrl'
+  'WebsiteUrl': 'websiteUrl',
+  'AssetBaseUrl': 'assetBaseUrl'
 };
 
 function applyPlaceholders(template, userData) {
