@@ -1,1 +1,84 @@
-const TEMPLATE_CACHE_TTL=864e5;function _cacheKey(t,e,a){return"acadon_tmpl_"+t+"_"+e+"_"+a}function _getCached(t,e,a){try{const n=_cacheKey(t,e,a),o=localStorage.getItem(n);if(!o)return null;const c=JSON.parse(o);return Date.now()-c.timestamp>864e5?(localStorage.removeItem(n),null):c.content}catch(t){return null}}function _setCache(t,e,a,n){try{const o=_cacheKey(t,e,a);localStorage.setItem(o,JSON.stringify({content:n,timestamp:Date.now()}))}catch(t){}}async function getTemplate(t,e,a){const n=_getCached(t,e,a);if(n)return n;const o="../../templates/"+t+"/"+e+"."+a,c=await fetch(o);if(!c.ok)throw new Error("Template nicht gefunden: "+t+"/"+e+"."+a);let r=await c.text();return"htm"===a&&(r=fixCharsetMeta(r)),_setCache(t,e,a,r),r}async function preloadTemplates(t){const e=["acadon_long","acadon_short"],a=["htm","txt"],n=[];for(const o of e)for(const e of a)n.push(getTemplate(t,o,e));await Promise.all(n)}function clearTemplateCache(){const t=[];for(let e=0;e<localStorage.length;e++){const a=localStorage.key(e);a&&a.startsWith("acadon_tmpl_")&&t.push(a)}t.forEach(function(t){localStorage.removeItem(t)})}
+// templateLoader.js - Template loading with localStorage cache
+
+const TEMPLATE_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
+function _cacheKey(lang, style, format) {
+  return 'acadon_tmpl_' + lang + '_' + style + '_' + format;
+}
+
+function _getCached(lang, style, format) {
+  try {
+    const key = _cacheKey(lang, style, format);
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+
+    const entry = JSON.parse(raw);
+    if (Date.now() - entry.timestamp > TEMPLATE_CACHE_TTL) {
+      localStorage.removeItem(key);
+      return null;
+    }
+    return entry.content;
+  } catch (e) {
+    return null;
+  }
+}
+
+function _setCache(lang, style, format, content) {
+  try {
+    const key = _cacheKey(lang, style, format);
+    localStorage.setItem(key, JSON.stringify({
+      content: content,
+      timestamp: Date.now()
+    }));
+  } catch (e) {
+    // localStorage full or unavailable - continue without cache
+  }
+}
+
+async function getTemplate(lang, style, format) {
+  // Check cache first
+  const cached = _getCached(lang, style, format);
+  if (cached) return cached;
+
+  // Fetch from server (relative to add-in origin)
+  const url = '../../templates/' + lang + '/' + style + '.' + format;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Template nicht gefunden: ' + lang + '/' + style + '.' + format);
+  }
+
+  let content = await response.text();
+
+  // Fix charset for HTML templates
+  if (format === 'htm') {
+    content = fixCharsetMeta(content);
+  }
+
+  _setCache(lang, style, format, content);
+  return content;
+}
+
+async function preloadTemplates(lang) {
+  const styles = ['acadon_long', 'acadon_short'];
+  const formats = ['htm', 'txt'];
+  const promises = [];
+
+  for (const style of styles) {
+    for (const format of formats) {
+      promises.push(getTemplate(lang, style, format));
+    }
+  }
+
+  await Promise.all(promises);
+}
+
+function clearTemplateCache() {
+  const keysToRemove = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('acadon_tmpl_')) {
+      keysToRemove.push(key);
+    }
+  }
+  keysToRemove.forEach(function(key) { localStorage.removeItem(key); });
+}

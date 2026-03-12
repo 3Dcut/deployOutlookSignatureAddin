@@ -5,6 +5,7 @@ var currentUserData = null;
 var savedPrefs = null;
 var blockRegistry = null;
 var editingSignatureId = null;
+var previewDialog = null;
 
 // --- Init ---
 
@@ -527,6 +528,102 @@ async function updatePreview() {
   }
 }
 
+// --- Pop-out Preview Dialog ---
+
+async function openPreviewDialog() {
+  var sig = editingSignatureId ? getSignatureById(savedPrefs, editingSignatureId) : null;
+  if (!sig || !sig.blocks || sig.blocks.length === 0) {
+    showErrorMessage('Keine Bausteine in der Signatur.');
+    return;
+  }
+
+  // Close existing dialog if open
+  if (previewDialog) {
+    previewDialog.close();
+    previewDialog = null;
+  }
+
+  var userData = _getCurrentFormData();
+  var sigLang = sig.language || 'DE';
+  var mergedData = mergeUserData(userData, null, sigLang);
+  var html = await composeSignature(sig, 'htm', mergedData);
+
+  var dialogUrl = new URL('preview-dialog.html', window.location.href).href;
+
+  Office.context.ui.displayDialogAsync(
+    dialogUrl,
+    { height: 50, width: 60, displayInIframe: false },
+    function(asyncResult) {
+      if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+        showErrorMessage('Dialog konnte nicht ge\u00f6ffnet werden: ' + asyncResult.error.message);
+        return;
+      }
+
+      previewDialog = asyncResult.value;
+
+      previewDialog.addEventHandler(
+        Office.EventType.DialogMessageReceived,
+        function(arg) {
+          handleDialogMessage(arg, html);
+        }
+      );
+
+      previewDialog.addEventHandler(
+        Office.EventType.DialogEventReceived,
+        function() {
+          previewDialog = null;
+        }
+      );
+
+      // Send HTML after dialog has initialized Office.js
+      setTimeout(function() {
+        if (previewDialog) {
+          previewDialog.messageChild(JSON.stringify({
+            type: 'preview',
+            html: html
+          }));
+        }
+      }, 1000);
+    }
+  );
+}
+
+function handleDialogMessage(arg, composedHtml) {
+  try {
+    var message = JSON.parse(arg.message);
+
+    if (message.action === 'insert') {
+      var htmlToInsert = message.html || composedHtml;
+
+      if (Office.context.mailbox.item) {
+        Office.context.mailbox.item.body.setSignatureAsync(
+          htmlToInsert,
+          { coercionType: Office.CoercionType.Html },
+          function(asyncResult) {
+            if (asyncResult.status === Office.AsyncResultStatus.Succeeded) {
+              showSuccessMessage('Signatur eingef\u00fcgt.');
+            } else {
+              showErrorMessage('Fehler: ' + asyncResult.error.message);
+            }
+          }
+        );
+      } else {
+        showErrorMessage('Keine E-Mail ge\u00f6ffnet.');
+      }
+    }
+
+    if (previewDialog) {
+      previewDialog.close();
+      previewDialog = null;
+    }
+  } catch (e) {
+    if (previewDialog) {
+      previewDialog.close();
+      previewDialog = null;
+    }
+  }
+}
+
 // --- Save Preferences ---
 
 function savePreferencesFromForm() {
@@ -720,6 +817,7 @@ document.getElementById('sigName').addEventListener('input', function() {
 document.getElementById('phone').addEventListener('change', debouncedPreview);
 document.getElementById('jobTitle').addEventListener('change', debouncedPreview);
 
+document.getElementById('popout-preview-btn').addEventListener('click', openPreviewDialog);
 document.getElementById('insert-btn').addEventListener('click', insertSignatureFromTaskpane);
 document.getElementById('save-btn').addEventListener('click', savePreferencesFromForm);
 document.getElementById('retry-btn').addEventListener('click', init);

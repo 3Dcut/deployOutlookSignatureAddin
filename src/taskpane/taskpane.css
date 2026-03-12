@@ -265,6 +265,18 @@ h3 {
   }
 }
 
+/* Preview Header */
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.preview-header h2 {
+  margin-bottom: 0;
+}
+
 /* Signature Preview */
 .signature-preview {
   border: 1px solid #e0e0e0;
