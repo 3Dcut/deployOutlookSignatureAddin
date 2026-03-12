@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║  KONFIGURATION                                                   ║
+  ║  Alle URLs und IDs, die bei einem Deployment angepasst           ║
+  ║  werden müssen, sind hier am Anfang der Datei gesammelt.         ║
+  ║                                                                  ║
+  ║  ADDIN_BASE_URL:  Basis-URL, unter der das Add-in gehostet ist   ║
+  ║                   Dev:  https://localhost:3001                    ║
+  ║                   Prod: https://3dcut.github.io/deployOutlookSignatureAddin  ║
+  ║                                                                  ║
+  ║  AZURE_CLIENT_ID: Azure AD App Registration Client ID            ║
+  ║                   Nötig für SSO / Graph API                      ║
+  ║                   Dummy: 00000000-0000-0000-0000-000000000000    ║
+  ║                                                                  ║
+  ║  Suche nach diesen Werten, um alle Stellen zu finden:            ║
+  ║    ADDIN_BASE_URL  → aktuell: https://3dcut.github.io/deployOutlookSignatureAddin  ║
+  ║    AZURE_CLIENT_ID → aktuell: 00000000-0000-0000-0000-0000...   ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
+<OfficeApp
+  xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+  xmlns:mailappor="http://schemas.microsoft.com/office/mailappversionoverrides/1.0"
+  xsi:type="MailApp">
+
+  <!-- ═══ Add-in Metadaten ═══ -->
+  <Id>6b9f28a3-2fa0-43dd-a5ae-a6834a8e2229</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>acadon AG</ProviderName>
+  <DefaultLocale>de-DE</DefaultLocale>
+  <DisplayName DefaultValue="acadon Signatur (Neu)"/>
+  <Description DefaultValue="Automatische E-Mail-Signaturen mit acadon-Vorlagen und Benutzerdaten aus dem Azure AD."/>
+
+  <!-- ═══ Icons (ADDIN_BASE_URL anpassen!) ═══ -->
+  <IconUrl DefaultValue="https://3dcut.github.io/deployOutlookSignatureAddin/assets/icon-64.png"/>
+  <HighResolutionIconUrl DefaultValue="https://3dcut.github.io/deployOutlookSignatureAddin/assets/icon-128.png"/>
+  <SupportUrl DefaultValue="https://www.acadon.net"/>
+
+  <AppDomains>
+    <AppDomain>https://3dcut.github.io</AppDomain>
+    <AppDomain>https://graph.microsoft.com</AppDomain>
+  </AppDomains>
+
+  <Hosts>
+    <Host Name="Mailbox"/>
+  </Hosts>
+
+  <Requirements>
+    <Sets>
+      <Set Name="Mailbox" MinVersion="1.10"/>
+    </Sets>
+  </Requirements>
+
+  <FormSettings>
+    <Form xsi:type="ItemEdit">
+      <DesktopSettings>
+        <!-- ADDIN_BASE_URL -->
+        <SourceLocation DefaultValue="https://3dcut.github.io/deployOutlookSignatureAddin/src/taskpane/taskpane.html"/>
+      </DesktopSettings>
+    </Form>
+  </FormSettings>
+
+  <Permissions>ReadWriteMailbox</Permissions>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  </Rule>
+
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
+
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.10">
+          <bt:Set Name="Mailbox"/>
+        </bt:Sets>
+      </Requirements>
+
+      <Hosts>
+        <Host xsi:type="MailHost">
+
+          <Runtimes>
+            <Runtime resid="SharedRuntime.Url">
+              <Override type="javascript" resid="SharedRuntime.Js"/>
+            </Runtime>
+          </Runtimes>
+
+          <DesktopFormFactor>
+            <FunctionFile resid="SharedRuntime.Url"/>
+
+            <!-- Ribbon Button to open Task Pane -->
+            <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="msgComposeGroup">
+                  <Label resid="GroupLabel"/>
+                  <Control xsi:type="Button" id="TaskpaneButton">
+                    <Label resid="TaskpaneButton.Label"/>
+                    <Supertip>
+                      <Title resid="TaskpaneButton.Label"/>
+                      <Description resid="TaskpaneButton.Tooltip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Icon.16x16"/>
+                      <bt:Image size="32" resid="Icon.32x32"/>
+                      <bt:Image size="80" resid="Icon.80x80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Taskpane.Url"/>
+                    </Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+
+            <!-- Event-Based Activation -->
+            <ExtensionPoint xsi:type="LaunchEvent">
+              <LaunchEvents>
+                <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageCompose"/>
+              </LaunchEvents>
+              <SourceLocation resid="SharedRuntime.Url"/>
+            </ExtensionPoint>
+
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+
+      <!-- ═══ Ressourcen (ADDIN_BASE_URL anpassen!) ═══ -->
+      <Resources>
+        <bt:Images>
+          <bt:Image id="Icon.16x16" DefaultValue="https://3dcut.github.io/deployOutlookSignatureAddin/assets/icon-16.png"/>
+          <bt:Image id="Icon.32x32" DefaultValue="https://3dcut.github.io/deployOutlookSignatureAddin/assets/icon-32.png"/>
+          <bt:Image id="Icon.80x80" DefaultValue="https://3dcut.github.io/deployOutlookSignatureAddin/assets/icon-80.png"/>
+        </bt:Images>
+        <bt:Urls>
+          <!-- ADDIN_BASE_URL -->
+          <bt:Url id="SharedRuntime.Url" DefaultValue="https://3dcut.github.io/deployOutlookSignatureAddin/src/commands/commands.html"/>
+          <bt:Url id="SharedRuntime.Js" DefaultValue="https://3dcut.github.io/deployOutlookSignatureAddin/src/commands/commands.js"/>
+          <bt:Url id="Taskpane.Url" DefaultValue="https://3dcut.github.io/deployOutlookSignatureAddin/src/taskpane/taskpane.html"/>
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="GroupLabel" DefaultValue="acadon Signatur"/>
+          <bt:String id="TaskpaneButton.Label" DefaultValue="Signatur-Einstellungen"/>
+        </bt:ShortStrings>
+        <bt:LongStrings>
+          <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Signatur-Vorlage, Sprache und individuelle Daten verwalten."/>
+        </bt:LongStrings>
+      </Resources>
+
+      <!-- ═══ Azure AD / SSO (AZURE_CLIENT_ID anpassen!) ═══ -->
+      <WebApplicationInfo>
+        <Id>00000000-0000-0000-0000-000000000000</Id>
+        <Resource>api://3dcut.github.io/deployOutlookSignatureAddin/00000000-0000-0000-0000-000000000000</Resource>
+        <Scopes>
+          <Scope>User.Read</Scope>
+          <Scope>profile</Scope>
+          <Scope>openid</Scope>
+        </Scopes>
+      </WebApplicationInfo>
+
+    </VersionOverrides>
+  </VersionOverrides>
+
+</OfficeApp>

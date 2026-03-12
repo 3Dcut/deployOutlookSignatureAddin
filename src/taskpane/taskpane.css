@@ -70,6 +70,66 @@ h3 {
   font-size: 12px;
 }
 
+/* Accordion Styling */
+.accordion {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  transition: box-shadow 0.2s ease;
+}
+
+.accordion:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.accordion summary {
+  padding: 12px 16px;
+  cursor: pointer;
+  background: #fdfdfd;
+  display: flex;
+  align-items: center;
+  list-style: none; /* Hide default arrow */
+  user-select: none;
+}
+
+.accordion summary::-webkit-details-marker {
+  display: none; /* Hide default arrow for Chrome/Safari */
+}
+
+.accordion summary::after {
+  content: '▼';
+  font-size: 10px;
+  margin-left: auto;
+  transition: transform 0.2s ease;
+  color: #999;
+}
+
+.accordion[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.accordion summary h2 {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.accordion-content {
+  padding: 0 16px 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.accordion[open] .accordion-content {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
 /* Form */
 .form-section {
   margin-bottom: 16px;

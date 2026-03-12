@@ -819,5 +819,14 @@ document.getElementById('jobTitle').addEventListener('change', debouncedPreview)
 
 document.getElementById('popout-preview-btn').addEventListener('click', openPreviewDialog);
 document.getElementById('insert-btn').addEventListener('click', insertSignatureFromTaskpane);
-document.getElementById('save-btn').addEventListener('click', savePreferencesFromForm);
+
+// Local save buttons in each accordion
+document.querySelectorAll('.save-btn').forEach(function(btn) {
+  btn.addEventListener('click', savePreferencesFromForm);
+});
+
 document.getElementById('retry-btn').addEventListener('click', init);
+
+// Also update preview when address changes (it's read-only but just in case)
+document.getElementById('address').addEventListener('change', debouncedPreview);
+
