@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>acadon Signatur</title>
+  <link rel="stylesheet" href="taskpane.css">
+  <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>acadon Signatur</h1>
+    </header>
+
+    <!-- Loading -->
+    <div id="loading" class="panel">
+      <div class="spinner"></div>
+      <p class="info-text">Lade Benutzerdaten...</p>
+    </div>
+
+    <!-- Error -->
+    <div id="error-panel" class="panel hidden">
+      <p class="error-text" id="error-message"></p>
+      <button id="retry-btn" class="btn btn-secondary">Erneut versuchen</button>
+    </div>
+
+    <!-- Main Form -->
+    <div id="main-form" class="panel hidden">
+
+      <!-- User Data (read-only info) -->
+      <section class="form-section">
+        <h2>Benutzerdaten</h2>
+        <div class="field-row">
+          <label for="firstName">Vorname</label>
+          <input type="text" id="firstName" readonly>
+        </div>
+        <div class="field-row">
+          <label for="lastName">Nachname</label>
+          <input type="text" id="lastName" readonly>
+        </div>
+        <div class="field-row">
+          <label for="email">E-Mail</label>
+          <input type="text" id="email" readonly>
+        </div>
+        <div class="field-row">
+          <label for="office">Standort</label>
+          <input type="text" id="office" readonly>
+        </div>
+      </section>
+
+      <!-- Editable overrides -->
+      <section class="form-section">
+        <h2>Anpassungen</h2>
+        <div class="field-row">
+          <label for="jobTitle">Titel / Position</label>
+          <input type="text" id="jobTitle" placeholder="Aus Azure AD">
+        </div>
+        <div class="field-row">
+          <label for="phone">Telefon</label>
+          <input type="text" id="phone" placeholder="Aus Azure AD">
+        </div>
+        <div class="field-row">
+          <label for="address">Adresse</label>
+          <input type="text" id="address" readonly>
+        </div>
+      </section>
+
+      <!-- Template selection -->
+      <section class="form-section">
+        <h2>Signatur-Einstellungen</h2>
+        <div class="field-row">
+          <label for="language">Sprache</label>
+          <select id="language">
+            <option value="DE">Deutsch</option>
+            <option value="EN">English</option>
+            <option value="CH">Deutsch (CH)</option>
+            <option value="DK">Dansk</option>
+            <option value="FR">Fran&ccedil;ais</option>
+            <option value="NL">Nederlands</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <label for="templateStyle">Neue Nachrichten</label>
+          <select id="templateStyle">
+            <option value="acadon_long">Ausf&uuml;hrlich (lang)</option>
+            <option value="acadon_short">Kompakt (kurz)</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <label for="templateStyleReply">Antworten</label>
+          <select id="templateStyleReply">
+            <option value="acadon_short">Kompakt (kurz)</option>
+            <option value="acadon_long">Ausf&uuml;hrlich (lang)</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Optional building blocks -->
+      <section id="addons-section" class="form-section hidden">
+        <h2>Zusatz-Bausteine</h2>
+        <div id="addons-list"></div>
+      </section>
+
+      <!-- Preview -->
+      <section class="form-section">
+        <h2>Vorschau</h2>
+        <div id="preview-container" class="signature-preview">
+          <p class="info-text">Vorschau wird geladen...</p>
+        </div>
+      </section>
+
+      <!-- Action buttons -->
+      <div class="button-row">
+        <button id="insert-btn" class="btn btn-primary">Signatur einfügen</button>
+        <button id="save-btn" class="btn btn-secondary" style="margin-top: 8px;">Einstellungen speichern</button>
+      </div>
+
+      <!-- Status messages -->
+      <div id="save-status" class="hidden">
+        <p id="save-message" class="success-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="../lib/templateEngine.js"></script>
+  <script type="text/javascript" src="../lib/officeMapping.js"></script>
+  <script type="text/javascript" src="../lib/templateLoader.js"></script>
+  <script type="text/javascript" src="../lib/addonLoader.js"></script>
+  <script type="text/javascript" src="../lib/settingsManager.js"></script>
+  <script type="text/javascript" src="../lib/graphClient.js"></script>
+  <script type="text/javascript" src="../lib/signatureComposer.js"></script>
+  <script type="text/javascript" src="taskpane.js"></script>
+</body>
+</html>

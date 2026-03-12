@@ -32,31 +32,31 @@
       <details class="form-section accordion" open>
         <summary><h2>Benutzereinstellungen</h2></summary>
         <div class="accordion-content">
-          <div class="field-row">
+          <div class="field-row stacked">
             <label for="firstName">Vorname</label>
             <input type="text" id="firstName" readonly>
           </div>
-          <div class="field-row">
+          <div class="field-row stacked">
             <label for="lastName">Nachname</label>
             <input type="text" id="lastName" readonly>
           </div>
-          <div class="field-row">
+          <div class="field-row stacked">
             <label for="jobTitle">Titel / Position</label>
             <input type="text" id="jobTitle" placeholder="Aus Azure AD">
           </div>
-          <div class="field-row">
+          <div class="field-row stacked">
             <label for="phone">Telefon</label>
             <input type="text" id="phone" placeholder="Aus Azure AD">
           </div>
-          <div class="field-row">
+          <div class="field-row stacked">
             <label for="email">E-Mail</label>
             <input type="text" id="email" readonly>
           </div>
-          <div class="field-row">
+          <div class="field-row stacked">
             <label for="office">Standort</label>
             <input type="text" id="office" readonly>
           </div>
-          <div class="field-row">
+          <div class="field-row stacked">
             <label for="address">Adresse</label>
             <input type="text" id="address" readonly>
           </div>
@@ -70,11 +70,11 @@
       <details class="form-section accordion">
         <summary><h2>Standardsignaturen</h2></summary>
         <div class="accordion-content">
-          <div class="field-row">
+          <div class="field-row stacked">
             <label for="assignNewMessage">Neue Nachrichten</label>
             <select id="assignNewMessage"></select>
           </div>
-          <div class="field-row">
+          <div class="field-row stacked">
             <label for="assignReply">Antworten</label>
             <select id="assignReply"></select>
           </div>
@@ -88,123 +88,139 @@
       <details class="form-section accordion" open>
         <summary><h2>Signaturen bearbeiten</h2></summary>
         <div class="accordion-content">
-          <!-- Filter row -->
-          <div class="filter-row">
-            <div class="filter-item">
-              <label for="filterLang">Sprache</label>
-              <select id="filterLang">
-                <option value="all">Alle</option>
-                <option value="DE">DE</option>
-                <option value="EN">EN</option>
-                <option value="CH">CH</option>
-                <option value="DK">DK</option>
-                <option value="FR">FR</option>
-                <option value="NL">NL</option>
-              </select>
-            </div>
-            <div class="filter-item">
-              <label for="filterType">Typ</label>
-              <select id="filterType">
-                <option value="all">Alle</option>
-                <option value="long">Lang</option>
-                <option value="short">Kurz</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Signature list -->
-          <div id="sig-list" class="sig-list"></div>
-
-          <button id="new-sig-btn" class="btn btn-secondary btn-small" type="button" style="margin-top:8px;">+ Neue Signatur</button>
-
-          <!-- Signature Editor -->
-          <div id="sig-editor-section" class="hidden" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee;">
-            <h3>Eigenschaften</h3>
-            <div class="field-row">
-              <label for="sigName">Name</label>
-              <input type="text" id="sigName" placeholder="z.B. Standard Deutsch">
-            </div>
-            <div class="field-row">
-              <label for="sigLang">Sprache</label>
-              <select id="sigLang">
-                <option value="DE">Deutsch</option>
-                <option value="EN">English</option>
-                <option value="CH">Deutsch (CH)</option>
-                <option value="DK">Dansk</option>
-                <option value="FR">Fran&ccedil;ais</option>
-                <option value="NL">Nederlands</option>
-              </select>
-            </div>
-            <div class="field-row">
-              <label for="sigType">Typ</label>
-              <select id="sigType">
-                <option value="long">Lang (ausf&uuml;hrlich)</option>
-                <option value="short">Kurz (kompakt)</option>
-              </select>
-            </div>
-
-            <div class="block-list-header">
-              <span class="block-list-label">Bausteine</span>
-            </div>
-            <div id="block-list" class="block-list"></div>
-            <div class="sig-actions">
-              <button id="add-block-btn" class="btn btn-secondary btn-small" type="button">+ Baustein</button>
-              <button id="add-custom-block-btn" class="btn btn-secondary btn-small" type="button">+ Eigener</button>
-              <button id="delete-sig-btn" class="btn btn-danger btn-small" type="button">L&ouml;schen</button>
-            </div>
-
-            <!-- Block Picker (hidden by default) -->
-            <div id="block-picker" class="block-picker hidden">
-              <div class="field-row" style="margin-top:8px;">
-                <label for="pickerCategory">Kategorie</label>
-                <select id="pickerCategory">
-                  <option value="all">Alle</option>
-                  <option value="layout">Layout</option>
-                  <option value="greeting">Gru&szlig;</option>
-                  <option value="contact">Kontakt</option>
-                  <option value="address">Adresse</option>
-                  <option value="legal">Rechtliches</option>
-                  <option value="banner">Banner</option>
-                  <option value="zertifizierung">Zertifizierung</option>
-                </select>
+          
+          <!-- Sub-Accordion: Auswahl -->
+          <details class="sub-accordion" open>
+            <summary>Auswahl / Filter</summary>
+            <div class="sub-accordion-content">
+              <div class="filter-row">
+                <div class="filter-item">
+                  <label for="filterLang">Sprache</label>
+                  <select id="filterLang">
+                    <option value="all">Alle</option>
+                    <option value="DE">DE</option>
+                    <option value="EN">EN</option>
+                    <option value="CH">CH</option>
+                    <option value="DK">DK</option>
+                    <option value="FR">FR</option>
+                    <option value="NL">NL</option>
+                  </select>
+                </div>
+                <div class="filter-item">
+                  <label for="filterType">Typ</label>
+                  <select id="filterType">
+                    <option value="all">Alle</option>
+                    <option value="long">Lang</option>
+                    <option value="short">Kurz</option>
+                  </select>
+                </div>
               </div>
-              <div id="picker-list" class="picker-list"></div>
+              <div id="sig-list" class="sig-list"></div>
+              <button id="new-sig-btn" class="btn btn-secondary btn-small" type="button" style="margin-top:8px; width:100%;">+ Neue Signatur</button>
             </div>
+          </details>
 
-            <!-- Custom Block Creator (hidden by default) -->
-            <div id="custom-block-creator" class="custom-block-creator hidden">
-              <h3>Eigener Baustein</h3>
-              <div class="field-row">
-                <label for="customBlockName">Name</label>
-                <input type="text" id="customBlockName" placeholder="z.B. Mein Banner">
+          <!-- Editor Wrapper -->
+          <div id="sig-editor-section" class="hidden">
+            <!-- Sub-Accordion: Eigenschaften -->
+            <details class="sub-accordion" open>
+              <summary>Eigenschaften</summary>
+              <div class="sub-accordion-content">
+                <div class="field-row stacked">
+                  <label for="sigName">Name</label>
+                  <input type="text" id="sigName" placeholder="z.B. Standard Deutsch">
+                </div>
+                <div class="field-row stacked">
+                  <label for="sigLang">Sprache</label>
+                  <select id="sigLang">
+                    <option value="DE">Deutsch</option>
+                    <option value="EN">English</option>
+                    <option value="CH">Deutsch (CH)</option>
+                    <option value="DK">Dansk</option>
+                    <option value="FR">Fran&ccedil;ais</option>
+                    <option value="NL">Nederlands</option>
+                  </select>
+                </div>
+                <div class="field-row stacked">
+                  <label for="sigType">Typ</label>
+                  <select id="sigType">
+                    <option value="long">Lang (ausf&uuml;hrlich)</option>
+                    <option value="short">Kurz (kompakt)</option>
+                  </select>
+                </div>
               </div>
-              <div style="margin-top:6px;">
-                <label style="font-size:12px; color:#555;">HTML-Inhalt:</label>
-                <textarea id="customBlockHtml" rows="6" placeholder="<table>...</table>"></textarea>
-              </div>
-              <div class="sig-actions" style="margin-top:6px;">
-                <button id="create-custom-btn" class="btn btn-secondary btn-small" type="button">Erstellen</button>
-                <button id="cancel-custom-btn" class="btn btn-secondary btn-small" type="button">Abbrechen</button>
-              </div>
-            </div>
+            </details>
 
-            <div class="button-row">
+            <!-- Sub-Accordion: Bausteine -->
+            <details class="sub-accordion" open>
+              <summary>Bausteine</summary>
+              <div class="sub-accordion-content">
+                <div id="block-list" class="block-list"></div>
+                <div class="sig-actions">
+                  <button id="add-block-btn" class="btn btn-secondary btn-small" type="button">+ Baustein</button>
+                  <button id="add-custom-block-btn" class="btn btn-secondary btn-small" type="button">+ Eigener</button>
+                </div>
+
+                <!-- Block Picker -->
+                <div id="block-picker" class="block-picker hidden">
+                  <div class="field-row stacked" style="margin-top:4px;">
+                    <label for="pickerCategory">Kategorie</label>
+                    <select id="pickerCategory">
+                      <option value="all">Alle</option>
+                      <option value="layout">Layout</option>
+                      <option value="greeting">Gru&szlig;</option>
+                      <option value="contact">Kontakt</option>
+                      <option value="address">Adresse</option>
+                      <option value="legal">Rechtliches</option>
+                      <option value="banner">Banner</option>
+                      <option value="zertifizierung">Zertifizierung</option>
+                    </select>
+                  </div>
+                  <div id="picker-list" class="picker-list"></div>
+                </div>
+
+                <!-- Custom Block Creator -->
+                <div id="custom-block-creator" class="custom-block-creator hidden">
+                  <h3>Eigener Baustein</h3>
+                  <div class="field-row stacked">
+                    <label for="customBlockName">Name</label>
+                    <input type="text" id="customBlockName" placeholder="z.B. Mein Banner">
+                  </div>
+                  <div style="margin-top:6px;">
+                    <label style="font-size:12px; color:#555;">HTML-Inhalt:</label>
+                    <textarea id="customBlockHtml" rows="6" placeholder="<table>...</table>"></textarea>
+                  </div>
+                  <div class="sig-actions" style="margin-top:6px;">
+                    <button id="create-custom-btn" class="btn btn-secondary btn-small" type="button">Erstellen</button>
+                    <button id="cancel-custom-btn" class="btn btn-secondary btn-small" type="button">Abbrechen</button>
+                  </div>
+                </div>
+              </div>
+            </details>
+
+            <div class="button-row" style="margin-top: 12px; border-top: 1px solid #eee; padding-top: 12px;">
               <button class="btn btn-secondary btn-small save-btn" type="button">Signatur speichern</button>
+              <button id="delete-sig-btn" class="btn btn-danger btn-small" type="button" style="width:100%; margin-top:8px;">Diese Signatur l&ouml;schen</button>
             </div>
           </div>
 
-          <!-- Preset Quick Start (shown when creating new signature) -->
+          <!-- Preset Section -->
           <div id="preset-section" class="hidden" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee;">
-            <h3>Von Vorlage starten</h3>
-            <div class="field-row">
-              <label for="presetSelect">Vorlage</label>
-              <select id="presetSelect"></select>
-            </div>
-            <div class="sig-actions">
-              <button id="apply-preset-btn" class="btn btn-secondary btn-small" type="button">Vorlage anwenden</button>
-              <button id="cancel-preset-btn" class="btn btn-secondary btn-small" type="button">Leer starten</button>
-            </div>
+            <details class="sub-accordion" open>
+              <summary>Von Vorlage starten</summary>
+              <div class="sub-accordion-content">
+                <div class="field-row stacked">
+                  <label for="presetSelect">Vorlage</label>
+                  <select id="presetSelect"></select>
+                </div>
+                <div class="sig-actions">
+                  <button id="apply-preset-btn" class="btn btn-secondary btn-small" type="button">Vorlage anwenden</button>
+                  <button id="cancel-preset-btn" class="btn btn-secondary btn-small" type="button">Leer starten</button>
+                </div>
+              </div>
+            </details>
           </div>
+
         </div>
       </details>
 

@@ -1,0 +1,1 @@
+function onNewMessageCompose(e){injectSignature(e,!1)}function onReplyCompose(e){injectSignature(e,!0)}Office.onReady(function(e){e.host===Office.HostType.Outlook&&(Office.actions.associate("onNewMessageCompose",onNewMessageCompose),Office.actions.associate("onReplyCompose",onReplyCompose))});
