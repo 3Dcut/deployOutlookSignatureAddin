@@ -1,0 +1,2 @@
+﻿Cordialement,
+@@FirstName@@ @@LastName@@

@@ -1,0 +1,403 @@
+{
+  "version": 2,
+  "blocks": [
+    {
+      "id": "layout_logo_start",
+      "name": "Logo-Bereich (Anfang)",
+      "description": "Zwei-Spalten-Layout: Logo links, Inhalte rechts",
+      "language": null,
+      "htmlFile": "layout/logo_start.htm",
+      "txtFile": "layout/logo_start.txt",
+      "category": "layout",
+      "tags": ["standard"],
+      "sortOrder": 5,
+      "placeholders": ["AssetBaseUrl"]
+    },
+    {
+      "id": "layout_logo_end",
+      "name": "Logo-Bereich (Ende)",
+      "description": "Schliesst Zwei-Spalten-Layout",
+      "language": null,
+      "htmlFile": "layout/logo_end.htm",
+      "txtFile": "layout/logo_end.txt",
+      "category": "layout",
+      "tags": ["standard"],
+      "sortOrder": 5,
+      "placeholders": []
+    },
+    {
+      "id": "greeting_de",
+      "name": "Gru\u00df (DE)",
+      "description": "Mit freundlichen Gr\u00fc\u00dfen",
+      "language": "DE",
+      "htmlFile": "greeting/de.htm",
+      "txtFile": "greeting/de.txt",
+      "category": "greeting",
+      "tags": ["standard"],
+      "sortOrder": 10,
+      "placeholders": []
+    },
+    {
+      "id": "greeting_en",
+      "name": "Greeting (EN)",
+      "description": "Kind regards,",
+      "language": "EN",
+      "htmlFile": "greeting/en.htm",
+      "txtFile": "greeting/en.txt",
+      "category": "greeting",
+      "tags": ["standard"],
+      "sortOrder": 10,
+      "placeholders": []
+    },
+    {
+      "id": "greeting_ch",
+      "name": "Gru\u00df (CH)",
+      "description": "Mit freundlichen Gr\u00fc\u00dfen",
+      "language": "CH",
+      "htmlFile": "greeting/ch.htm",
+      "txtFile": "greeting/ch.txt",
+      "category": "greeting",
+      "tags": ["standard"],
+      "sortOrder": 10,
+      "placeholders": []
+    },
+    {
+      "id": "greeting_dk",
+      "name": "Hilsen (DK)",
+      "description": "Med Venlig Hilsen / Best regards,",
+      "language": "DK",
+      "htmlFile": "greeting/dk.htm",
+      "txtFile": "greeting/dk.txt",
+      "category": "greeting",
+      "tags": ["standard"],
+      "sortOrder": 10,
+      "placeholders": []
+    },
+    {
+      "id": "greeting_fr",
+      "name": "Salutation (FR)",
+      "description": "Cordialement,",
+      "language": "FR",
+      "htmlFile": "greeting/fr.htm",
+      "txtFile": "greeting/fr.txt",
+      "category": "greeting",
+      "tags": ["standard"],
+      "sortOrder": 10,
+      "placeholders": []
+    },
+    {
+      "id": "greeting_nl",
+      "name": "Groet (NL)",
+      "description": "Met vriendelijke groeten, Kind regards,",
+      "language": "NL",
+      "htmlFile": "greeting/nl.htm",
+      "txtFile": "greeting/nl.txt",
+      "category": "greeting",
+      "tags": ["standard"],
+      "sortOrder": 10,
+      "placeholders": []
+    },
+    {
+      "id": "nameblock_full",
+      "name": "Name & Kontakt (voll)",
+      "description": "Name, Titel, Firma, Trennlinie, Telefon, E-Mail, Website, Adresse",
+      "language": null,
+      "htmlFile": "contact/full.htm",
+      "txtFile": "contact/full.txt",
+      "category": "contact",
+      "tags": ["standard"],
+      "sortOrder": 20,
+      "placeholders": ["FirstName", "LastName", "JobTitle", "TelefonNumber", "MailAddress", "CompanyName", "WebsiteUrl", "Address", "AssetBaseUrl"]
+    },
+    {
+      "id": "nameblock_compact",
+      "name": "Name (kompakt)",
+      "description": "Nur Vorname Nachname",
+      "language": null,
+      "htmlFile": "contact/compact.htm",
+      "txtFile": "contact/compact.txt",
+      "category": "contact",
+      "tags": ["standard"],
+      "sortOrder": 20,
+      "placeholders": ["FirstName", "LastName"]
+    },
+    {
+      "id": "branding_logo_social",
+      "name": "Logo + Social Media (veraltet)",
+      "description": "Bitte layout_logo_start verwenden",
+      "language": null,
+      "htmlFile": "branding/logo_social.htm",
+      "txtFile": "branding/logo_social.txt",
+      "category": "branding",
+      "tags": ["deprecated"],
+      "sortOrder": 99,
+      "placeholders": ["AssetBaseUrl"]
+    },
+    {
+      "id": "address_de",
+      "name": "Standorte (DE)",
+      "description": "Standortliste",
+      "language": "DE",
+      "htmlFile": "address/de.htm",
+      "txtFile": "address/de.txt",
+      "category": "address",
+      "tags": ["standard"],
+      "sortOrder": 40,
+      "placeholders": []
+    },
+    {
+      "id": "address_en",
+      "name": "Locations (EN)",
+      "description": "Location list",
+      "language": "EN",
+      "htmlFile": "address/en.htm",
+      "txtFile": "address/en.txt",
+      "category": "address",
+      "tags": ["standard"],
+      "sortOrder": 40,
+      "placeholders": []
+    },
+    {
+      "id": "address_ch",
+      "name": "Standorte (CH)",
+      "description": "Standortliste",
+      "language": "CH",
+      "htmlFile": "address/ch.htm",
+      "txtFile": "address/ch.txt",
+      "category": "address",
+      "tags": ["standard"],
+      "sortOrder": 40,
+      "placeholders": []
+    },
+    {
+      "id": "address_dk",
+      "name": "Placeringer (DK)",
+      "description": "Placeringer",
+      "language": "DK",
+      "htmlFile": "address/dk.htm",
+      "txtFile": "address/dk.txt",
+      "category": "address",
+      "tags": ["standard"],
+      "sortOrder": 40,
+      "placeholders": []
+    },
+    {
+      "id": "address_fr",
+      "name": "Emplacements (FR)",
+      "description": "Emplacements",
+      "language": "FR",
+      "htmlFile": "address/fr.htm",
+      "txtFile": "address/fr.txt",
+      "category": "address",
+      "tags": ["standard"],
+      "sortOrder": 40,
+      "placeholders": []
+    },
+    {
+      "id": "address_nl",
+      "name": "Standplaatsen (NL)",
+      "description": "Standplaatsen",
+      "language": "NL",
+      "htmlFile": "address/nl.htm",
+      "txtFile": "address/nl.txt",
+      "category": "address",
+      "tags": ["standard"],
+      "sortOrder": 40,
+      "placeholders": []
+    },
+    {
+      "id": "legal_de",
+      "name": "Rechtliches (DE - AG)",
+      "description": "Handelsregister, Vorstand, Disclaimer",
+      "language": "DE",
+      "htmlFile": "legal/de.htm",
+      "txtFile": "legal/de.txt",
+      "category": "legal",
+      "tags": ["standard"],
+      "sortOrder": 50,
+      "placeholders": []
+    },
+    {
+      "id": "legal_en",
+      "name": "Legal (EN - AG)",
+      "description": "Commercial register, board, disclaimer",
+      "language": "EN",
+      "htmlFile": "legal/en.htm",
+      "txtFile": "legal/en.txt",
+      "category": "legal",
+      "tags": ["standard"],
+      "sortOrder": 50,
+      "placeholders": []
+    },
+    {
+      "id": "legal_ch",
+      "name": "Rechtliches (CH - GmbH)",
+      "description": "Schweizer Rechtsinformationen",
+      "language": "CH",
+      "htmlFile": "legal/ch.htm",
+      "txtFile": "legal/ch.txt",
+      "category": "legal",
+      "tags": ["standard"],
+      "sortOrder": 50,
+      "placeholders": []
+    },
+    {
+      "id": "legal_dk",
+      "name": "Juridisk (DK)",
+      "description": "Selskabsoplysninger og ansvarsfraskrivelse",
+      "language": "DK",
+      "htmlFile": "legal/dk.htm",
+      "txtFile": "legal/dk.txt",
+      "category": "legal",
+      "tags": ["standard"],
+      "sortOrder": 50,
+      "placeholders": []
+    },
+    {
+      "id": "legal_fr",
+      "name": "Mentions l\u00e9gales (FR)",
+      "description": "Registre du commerce et avertissement",
+      "language": "FR",
+      "htmlFile": "legal/fr.htm",
+      "txtFile": "legal/fr.txt",
+      "category": "legal",
+      "tags": ["standard"],
+      "sortOrder": 50,
+      "placeholders": []
+    },
+    {
+      "id": "legal_nl",
+      "name": "Juridisch (NL - B.V.)",
+      "description": "Handelsregister en disclaimer",
+      "language": "NL",
+      "htmlFile": "legal/nl.htm",
+      "txtFile": "legal/nl.txt",
+      "category": "legal",
+      "tags": ["standard"],
+      "sortOrder": 50,
+      "placeholders": []
+    },
+    {
+      "id": "banner_example",
+      "name": "Beispiel-Banner (Event/Messe)",
+      "description": "Ein Platzhalter-Banner f\u00fcr Veranstaltungen und Messen.",
+      "language": null,
+      "htmlFile": "custom/banner_example.htm",
+      "txtFile": null,
+      "category": "banner",
+      "tags": ["optional"],
+      "sortOrder": 60,
+      "placeholders": []
+    },
+    {
+      "id": "iso_27001",
+      "name": "ISO 27001 Zertifizierung",
+      "description": "Hinweis auf ISO 27001 Zertifizierung.",
+      "language": null,
+      "htmlFile": "custom/iso_27001.htm",
+      "txtFile": null,
+      "category": "zertifizierung",
+      "tags": ["optional"],
+      "sortOrder": 60,
+      "placeholders": []
+    }
+  ],
+  "presets": [
+    {
+      "id": "preset_long_de",
+      "name": "Ausf\u00fchrlich (DE)",
+      "description": "Standard-Signatur, lang, deutsch",
+      "language": "DE",
+      "type": "long",
+      "blockIds": ["greeting_de", "layout_logo_start", "nameblock_full", "layout_logo_end", "address_de", "legal_de"]
+    },
+    {
+      "id": "preset_short_de",
+      "name": "Kompakt (DE)",
+      "description": "Kurze Signatur, deutsch",
+      "language": "DE",
+      "type": "short",
+      "blockIds": ["greeting_de", "nameblock_compact"]
+    },
+    {
+      "id": "preset_long_en",
+      "name": "Detailed (EN)",
+      "description": "Standard signature, full, English",
+      "language": "EN",
+      "type": "long",
+      "blockIds": ["greeting_en", "layout_logo_start", "nameblock_full", "layout_logo_end", "address_en", "legal_en"]
+    },
+    {
+      "id": "preset_short_en",
+      "name": "Compact (EN)",
+      "description": "Short signature, English",
+      "language": "EN",
+      "type": "short",
+      "blockIds": ["greeting_en", "nameblock_compact"]
+    },
+    {
+      "id": "preset_long_ch",
+      "name": "Ausf\u00fchrlich (CH)",
+      "description": "Standard-Signatur, lang, Schweiz",
+      "language": "CH",
+      "type": "long",
+      "blockIds": ["greeting_ch", "layout_logo_start", "nameblock_full", "layout_logo_end", "address_ch", "legal_ch"]
+    },
+    {
+      "id": "preset_short_ch",
+      "name": "Kompakt (CH)",
+      "description": "Kurze Signatur, Schweiz",
+      "language": "CH",
+      "type": "short",
+      "blockIds": ["greeting_ch", "nameblock_compact"]
+    },
+    {
+      "id": "preset_long_dk",
+      "name": "Detaljeret (DK)",
+      "description": "Standard signatur, fuld, dansk",
+      "language": "DK",
+      "type": "long",
+      "blockIds": ["greeting_dk", "layout_logo_start", "nameblock_full", "layout_logo_end", "address_dk", "legal_dk"]
+    },
+    {
+      "id": "preset_short_dk",
+      "name": "Kompakt (DK)",
+      "description": "Kort signatur, dansk",
+      "language": "DK",
+      "type": "short",
+      "blockIds": ["greeting_dk", "nameblock_compact"]
+    },
+    {
+      "id": "preset_long_fr",
+      "name": "D\u00e9taill\u00e9e (FR)",
+      "description": "Signature standard, compl\u00e8te, fran\u00e7ais",
+      "language": "FR",
+      "type": "long",
+      "blockIds": ["greeting_fr", "layout_logo_start", "nameblock_full", "layout_logo_end", "address_fr", "legal_fr"]
+    },
+    {
+      "id": "preset_short_fr",
+      "name": "Compacte (FR)",
+      "description": "Signature courte, fran\u00e7ais",
+      "language": "FR",
+      "type": "short",
+      "blockIds": ["greeting_fr", "nameblock_compact"]
+    },
+    {
+      "id": "preset_long_nl",
+      "name": "Uitgebreid (NL)",
+      "description": "Standaard handtekening, volledig, Nederlands",
+      "language": "NL",
+      "type": "long",
+      "blockIds": ["greeting_nl", "layout_logo_start", "nameblock_full", "layout_logo_end", "address_nl", "legal_nl"]
+    },
+    {
+      "id": "preset_short_nl",
+      "name": "Compact (NL)",
+      "description": "Korte handtekening, Nederlands",
+      "language": "NL",
+      "type": "short",
+      "blockIds": ["greeting_nl", "nameblock_compact"]
+    }
+  ]
+}
