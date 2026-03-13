@@ -428,18 +428,34 @@ function deleteCurrentSignature() {
   }
   if (!confirm('Soll diese Signatur wirklich gel\u00f6scht werden?')) return;
 
-  removeSignature(savedPrefs, editingSignatureId);
-  editingSignatureId = null;
-  renderSignatureList();
-  renderAssignmentDropdowns(savedPrefs);
+  var sigIdToDelete = editingSignatureId;
+  console.log("Deleting signature: " + sigIdToDelete);
 
-  if (savedPrefs.signatures && savedPrefs.signatures.length > 0) {
-    selectSignatureForEditing(savedPrefs.signatures[0].id);
-  } else {
-    document.getElementById('sig-editor-section').classList.add('hidden');
-  }
-  updateStorageUsage('dirty');
-  updatePreview();
+  removeSignature(savedPrefs, sigIdToDelete);
+  editingSignatureId = null;
+
+  // Save immediately to cloud
+  savePreferences(savedPrefs, function(success) {
+    if (success) {
+      console.log("Signature deleted and saved successfully.");
+      renderSignatureList();
+      renderAssignmentDropdowns(savedPrefs);
+
+      if (savedPrefs.signatures && savedPrefs.signatures.length > 0) {
+        selectSignatureForEditing(savedPrefs.signatures[0].id);
+      } else {
+        document.getElementById('sig-editor-section').classList.add('hidden');
+      }
+      
+      updateStorageUsage('synced');
+      updatePreview();
+      showSuccessMessage('Signatur gel\u00f6scht und gespeichert.');
+    } else {
+      console.error("Failed to save deletion.");
+      updateStorageUsage('error');
+      showErrorMessage('Fehler beim Speichern der L\u00f6schung.');
+    }
+  });
 }
 
 // --- Presets ---
