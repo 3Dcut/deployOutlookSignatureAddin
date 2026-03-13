@@ -4,8 +4,7 @@ Office.onReady(function(info) {
   if (info.host === Office.HostType.Outlook) {
     // Register event handlers
     Office.actions.associate("onNewMessageCompose", onNewMessageCompose);
-    Office.actions.associate("onReplyCompose", onReplyCompose);
-    Office.actions.associate("onForwardCompose", onForwardCompose);
+    Office.actions.associate("onMessageCompose", onMessageCompose);
   }
 });
 
@@ -13,10 +12,6 @@ function onNewMessageCompose(event) {
   injectSignature(event, false, "NewMessage");
 }
 
-function onReplyCompose(event) {
-  injectSignature(event, true, "Reply (Event)");
-}
-
-function onForwardCompose(event) {
-  injectSignature(event, true, "Forward (Event)");
+function onMessageCompose(event) {
+  injectSignature(event, false, "MessageCompose");
 }
