@@ -48,6 +48,7 @@ async function init() {
       selectSignatureForEditing(savedPrefs.signatures[0].id);
     }
 
+    updateStorageUsage();
     show('main-form');
     updatePreview();
 
@@ -248,6 +249,7 @@ function handleMoveBlock(fromIndex, toIndex) {
   moveBlockInSignature(savedPrefs, editingSignatureId, fromIndex, toIndex);
   var sig = getSignatureById(savedPrefs, editingSignatureId);
   renderBlockList(sig);
+  updateStorageUsage();
   updatePreview();
 }
 
@@ -256,6 +258,7 @@ function handleRemoveBlock(blockIndex) {
   removeBlockFromSignature(savedPrefs, editingSignatureId, blockIndex);
   var sig = getSignatureById(savedPrefs, editingSignatureId);
   renderBlockList(sig);
+  updateStorageUsage();
   updatePreview();
 }
 
@@ -265,6 +268,7 @@ function handleAddBlock(blockId) {
   var sig = getSignatureById(savedPrefs, editingSignatureId);
   renderBlockList(sig);
   document.getElementById('block-picker').classList.add('hidden');
+  updateStorageUsage();
   updatePreview();
 }
 
@@ -385,6 +389,7 @@ function createCustomBlock() {
     var sig = getSignatureById(savedPrefs, editingSignatureId);
     renderBlockList(sig);
     document.getElementById('custom-block-creator').classList.add('hidden');
+    updateStorageUsage();
     updatePreview();
   }
 }
@@ -408,6 +413,7 @@ function createNewSignature() {
   renderSignatureList();
   renderAssignmentDropdowns(savedPrefs);
   selectSignatureForEditing(newId);
+  updateStorageUsage();
 
   // Show preset section for quick start
   renderPresetOptions(defaultLang);
@@ -432,6 +438,7 @@ function deleteCurrentSignature() {
   } else {
     document.getElementById('sig-editor-section').classList.add('hidden');
   }
+  updateStorageUsage();
   updatePreview();
 }
 
@@ -441,7 +448,7 @@ function renderPresetOptions(lang) {
   var sel = document.getElementById('presetSelect');
   sel.innerHTML = '';
 
-  if (!blockRegistry || !blockRegistry.presets) return;
+  if (!blockRegistry || !blockRegistry.blocks) return;
 
   var presets = getPresetsForLanguage(blockRegistry, lang);
   var otherPresets = blockRegistry.presets.filter(function(p) { return p.language !== lang; });
@@ -486,6 +493,7 @@ function applyPreset() {
   renderBlockList(sig);
   renderSignatureList();
   document.getElementById('preset-section').classList.add('hidden');
+  updateStorageUsage();
   updatePreview();
 }
 
@@ -681,6 +689,7 @@ function savePreferencesFromForm() {
     if (success) {
       renderSignatureList();
       renderAssignmentDropdowns(savedPrefs);
+      updateStorageUsage();
       showSuccessMessage('Einstellungen gespeichert. Die Signatur wird ab der n\u00e4chsten E-Mail aktualisiert.');
     } else {
       showErrorMessage('Fehler beim Speichern der Einstellungen.');
@@ -776,6 +785,41 @@ function showErrorMessage(msg) {
   setTimeout(function() { statusEl.classList.add('hidden'); }, 4000);
 }
 
+// --- Storage Usage ---
+
+function updateStorageUsage() {
+  if (!savedPrefs) return;
+
+  try {
+    var serialized = JSON.stringify(savedPrefs);
+    // Rough estimate of byte size (UTF-8)
+    var bytes = unescape(encodeURIComponent(serialized)).length;
+    var kb = (bytes / 1024).toFixed(1);
+    var limitKb = 32;
+    var percent = Math.min(100, (bytes / (limitKb * 1024)) * 100);
+
+    var usedEl = document.getElementById('storage-used');
+    var fillEl = document.getElementById('storage-fill');
+
+    if (usedEl) usedEl.textContent = kb;
+    if (fillEl) {
+      fillEl.style.width = percent + '%';
+      
+      // Update colors
+      fillEl.classList.remove('warning', 'danger');
+      if (percent > 95) {
+        fillEl.classList.add('danger');
+      } else if (percent > 80) {
+        fillEl.classList.add('warning');
+      }
+    }
+    
+    console.log("Storage usage updated: " + bytes + " bytes (" + percent.toFixed(1) + "%)");
+  } catch (e) {
+    console.warn("Could not update storage usage display:", e);
+  }
+}
+
 // --- Debounced preview ---
 var _previewTimeout = null;
 function debouncedPreview() {
@@ -794,6 +838,7 @@ document.getElementById('sigLang').addEventListener('change', function() {
   if (editingSignatureId) {
     updateSignature(savedPrefs, editingSignatureId, { language: this.value });
     renderSignatureList();
+    updateStorageUsage();
     updatePreview();
   }
 });
@@ -802,6 +847,8 @@ document.getElementById('sigType').addEventListener('change', function() {
   if (editingSignatureId) {
     updateSignature(savedPrefs, editingSignatureId, { type: this.value });
     renderSignatureList();
+    updateStorageUsage();
+    updatePreview();
   }
 });
 
@@ -825,6 +872,7 @@ document.getElementById('sigName').addEventListener('input', function() {
     updateSignature(savedPrefs, editingSignatureId, { name: this.value.trim() });
     renderSignatureList();
     renderAssignmentDropdowns(savedPrefs);
+    updateStorageUsage();
   }
 });
 
@@ -843,4 +891,3 @@ document.getElementById('retry-btn').addEventListener('click', init);
 
 // Also update preview when address changes (it's read-only but just in case)
 document.getElementById('address').addEventListener('change', debouncedPreview);
-
