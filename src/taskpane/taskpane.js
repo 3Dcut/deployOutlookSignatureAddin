@@ -48,7 +48,7 @@ async function init() {
       selectSignatureForEditing(savedPrefs.signatures[0].id);
     }
 
-    updateStorageUsage();
+    updateStorageUsage('synced');
     show('main-form');
     updatePreview();
 
@@ -249,7 +249,7 @@ function handleMoveBlock(fromIndex, toIndex) {
   moveBlockInSignature(savedPrefs, editingSignatureId, fromIndex, toIndex);
   var sig = getSignatureById(savedPrefs, editingSignatureId);
   renderBlockList(sig);
-  updateStorageUsage();
+  updateStorageUsage('dirty');
   updatePreview();
 }
 
@@ -258,7 +258,7 @@ function handleRemoveBlock(blockIndex) {
   removeBlockFromSignature(savedPrefs, editingSignatureId, blockIndex);
   var sig = getSignatureById(savedPrefs, editingSignatureId);
   renderBlockList(sig);
-  updateStorageUsage();
+  updateStorageUsage('dirty');
   updatePreview();
 }
 
@@ -268,7 +268,7 @@ function handleAddBlock(blockId) {
   var sig = getSignatureById(savedPrefs, editingSignatureId);
   renderBlockList(sig);
   document.getElementById('block-picker').classList.add('hidden');
-  updateStorageUsage();
+  updateStorageUsage('dirty');
   updatePreview();
 }
 
@@ -389,7 +389,7 @@ function createCustomBlock() {
     var sig = getSignatureById(savedPrefs, editingSignatureId);
     renderBlockList(sig);
     document.getElementById('custom-block-creator').classList.add('hidden');
-    updateStorageUsage();
+    updateStorageUsage('dirty');
     updatePreview();
   }
 }
@@ -413,7 +413,7 @@ function createNewSignature() {
   renderSignatureList();
   renderAssignmentDropdowns(savedPrefs);
   selectSignatureForEditing(newId);
-  updateStorageUsage();
+  updateStorageUsage('dirty');
 
   // Show preset section for quick start
   renderPresetOptions(defaultLang);
@@ -438,7 +438,7 @@ function deleteCurrentSignature() {
   } else {
     document.getElementById('sig-editor-section').classList.add('hidden');
   }
-  updateStorageUsage();
+  updateStorageUsage('dirty');
   updatePreview();
 }
 
@@ -448,7 +448,7 @@ function renderPresetOptions(lang) {
   var sel = document.getElementById('presetSelect');
   sel.innerHTML = '';
 
-  if (!blockRegistry || !blockRegistry.blocks) return;
+  if (!blockRegistry || !blockRegistry.presets) return;
 
   var presets = getPresetsForLanguage(blockRegistry, lang);
   var otherPresets = blockRegistry.presets.filter(function(p) { return p.language !== lang; });
@@ -493,7 +493,7 @@ function applyPreset() {
   renderBlockList(sig);
   renderSignatureList();
   document.getElementById('preset-section').classList.add('hidden');
-  updateStorageUsage();
+  updateStorageUsage('dirty');
   updatePreview();
 }
 
@@ -689,9 +689,10 @@ function savePreferencesFromForm() {
     if (success) {
       renderSignatureList();
       renderAssignmentDropdowns(savedPrefs);
-      updateStorageUsage();
+      updateStorageUsage('synced');
       showSuccessMessage('Einstellungen gespeichert. Die Signatur wird ab der n\u00e4chsten E-Mail aktualisiert.');
     } else {
+      updateStorageUsage('error');
       showErrorMessage('Fehler beim Speichern der Einstellungen.');
     }
   });
@@ -785,10 +786,16 @@ function showErrorMessage(msg) {
   setTimeout(function() { statusEl.classList.add('hidden'); }, 4000);
 }
 
-// --- Storage Usage ---
+// --- Storage Usage & Sync Status ---
 
-function updateStorageUsage() {
+var _lastSyncStatus = 'synced'; // 'synced', 'dirty', 'error'
+
+function updateStorageUsage(status) {
   if (!savedPrefs) return;
+
+  if (status) {
+    _lastSyncStatus = status;
+  }
 
   try {
     var serialized = JSON.stringify(savedPrefs);
@@ -800,12 +807,13 @@ function updateStorageUsage() {
 
     var usedEl = document.getElementById('storage-used');
     var fillEl = document.getElementById('storage-fill');
+    var statusEl = document.getElementById('sync-status');
 
     if (usedEl) usedEl.textContent = kb;
     if (fillEl) {
       fillEl.style.width = percent + '%';
       
-      // Update colors
+      // Update usage bar colors
       fillEl.classList.remove('warning', 'danger');
       if (percent > 95) {
         fillEl.classList.add('danger');
@@ -813,8 +821,19 @@ function updateStorageUsage() {
         fillEl.classList.add('warning');
       }
     }
+
+    if (statusEl) {
+      statusEl.classList.remove('synced', 'dirty', 'error');
+      statusEl.classList.add(_lastSyncStatus);
+      
+      // Update title based on status
+      var statusTitle = "Synchronisiert";
+      if (_lastSyncStatus === 'dirty') statusTitle = "Nicht gespeicherte Änderungen (lokal)";
+      if (_lastSyncStatus === 'error') statusTitle = "Fehler beim letzten Speichern";
+      statusEl.title = statusTitle;
+    }
     
-    console.log("Storage usage updated: " + bytes + " bytes (" + percent.toFixed(1) + "%)");
+    console.log("Storage usage updated: " + bytes + " bytes (" + percent.toFixed(1) + "%) - Status: " + _lastSyncStatus);
   } catch (e) {
     console.warn("Could not update storage usage display:", e);
   }
@@ -838,7 +857,7 @@ document.getElementById('sigLang').addEventListener('change', function() {
   if (editingSignatureId) {
     updateSignature(savedPrefs, editingSignatureId, { language: this.value });
     renderSignatureList();
-    updateStorageUsage();
+    updateStorageUsage('dirty');
     updatePreview();
   }
 });
@@ -847,7 +866,7 @@ document.getElementById('sigType').addEventListener('change', function() {
   if (editingSignatureId) {
     updateSignature(savedPrefs, editingSignatureId, { type: this.value });
     renderSignatureList();
-    updateStorageUsage();
+    updateStorageUsage('dirty');
     updatePreview();
   }
 });
@@ -872,7 +891,7 @@ document.getElementById('sigName').addEventListener('input', function() {
     updateSignature(savedPrefs, editingSignatureId, { name: this.value.trim() });
     renderSignatureList();
     renderAssignmentDropdowns(savedPrefs);
-    updateStorageUsage();
+    updateStorageUsage('dirty');
   }
 });
 

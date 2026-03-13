@@ -45,6 +45,37 @@ h1 {
 .storage-text {
   font-size: 10px;
   color: #777;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sync-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  background: #ccc;
+  transition: background 0.3s ease;
+}
+
+.sync-status.synced {
+  background: #2e7d32; /* Green - Persisted in Cloud */
+}
+
+.sync-status.dirty {
+  background: #ffa000; /* Amber - Unsaved changes in memory */
+  animation: pulse-amber 2s infinite;
+}
+
+.sync-status.error {
+  background: #d32f2f; /* Red - Last sync failed */
+}
+
+@keyframes pulse-amber {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
 }
 
 .storage-bar {
