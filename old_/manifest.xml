@@ -26,11 +26,11 @@
   xsi:type="MailApp">
 
   <!-- ═══ Add-in Metadaten ═══ -->
-  <Id>99429e0d-6dea-4396-9f65-e26234e56fc5</Id>
+  <Id>6b9f28a3-2fa0-43dd-a5ae-a6834a8e2229</Id>
   <Version>1.0.0.0</Version>
   <ProviderName>acadon AG</ProviderName>
   <DefaultLocale>de-DE</DefaultLocale>
-  <DisplayName DefaultValue="acadon Signatur - Beta"/>
+  <DisplayName DefaultValue="acadon Signatur (Neu)"/>
   <Description DefaultValue="Automatische E-Mail-Signaturen mit acadon-Vorlagen und Benutzerdaten aus dem Azure AD."/>
 
   <!-- ═══ Icons (ADDIN_BASE_URL anpassen!) ═══ -->
@@ -116,8 +116,6 @@
             <ExtensionPoint xsi:type="LaunchEvent">
               <LaunchEvents>
                 <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageCompose"/>
-                <LaunchEvent Type="OnMessageReplyCompose" FunctionName="onReplyCompose"/>
-                <LaunchEvent Type="OnMessageForwardCompose" FunctionName="onForwardCompose"/>
               </LaunchEvents>
               <SourceLocation resid="SharedRuntime.Url"/>
             </ExtensionPoint>

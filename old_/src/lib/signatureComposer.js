@@ -109,71 +109,44 @@ function _assembleText(beforeParts, rightColumnParts, afterParts) {
   return all.join('\n\n');
 }
 
-async function injectSignature(event, isReply, triggerSource) {
+async function injectSignature(event, isReply) {
   try {
-    console.log('acadon Signatur: Triggered by', triggerSource);
-
-    // 1. Get current item to check subject for fallback
-    var item = Office.context.mailbox.item;
-
-    // Fallback: If not marked as reply but subject looks like one
-    if (!isReply) {
-      var subject = item.subject;
-      if (subject) {
-        var lowerSubj = subject.toLowerCase();
-        // Check for common reply/forward prefixes
-        if (lowerSubj.indexOf('aw:') === 0 || lowerSubj.indexOf('re:') === 0 || lowerSubj.indexOf('fw:') === 0 || lowerSubj.indexOf('wg:') === 0) {
-          console.log('acadon Signatur: Fallback detected reply/forward via subject:', subject);
-          isReply = true;
-          triggerSource += " (Fallback)";
-        }
-      }
-    }
-
-    // 2. Load user data and preferences
+    // 1. Load user data and preferences
     var userData = await getUserData();
     var prefs = getPreferencesOrDefaults(userData.officeLocation);
 
-    // 2.5. Check if auto-insert is enabled
-    if (prefs.autoInsertEnabled === false) {
-      console.log('acadon Signatur: Auto-insert is disabled in preferences.');
-      event.completed();
-      return;
-    }
-
-    // 3. Get the assigned signature
+    // 2. Get the assigned signature
     var assignmentKey = isReply ? 'reply' : 'newMessage';
     var sigId = prefs.assignments[assignmentKey];
     var signature = getSignatureById(prefs, sigId);
 
     if (!signature) {
-      console.warn('acadon Signatur: No signature found for assignment:', assignmentKey);
+      console.warn('No signature found for assignment:', assignmentKey);
       event.completed();
       return;
     }
 
-    console.log('acadon Signatur: Inserting signature:', signature.name, ' (Source:', triggerSource, ')');
-
-    // 4. Merge user data with overrides and company info (use signature's language)
+    // 3. Merge user data with overrides and company info (use signature's language)
     var sigLang = signature.language || 'DE';
     var mergedData = mergeUserData(userData, prefs.overrides, sigLang);
 
-    // 5. Compose the HTML signature from blocks
+    // 4. Compose the HTML signature from blocks
     var htmlSignature = await composeSignature(signature, 'htm', mergedData);
 
-    // 6. Inject via setSignatureAsync
+    // 5. Inject via setSignatureAsync
+    var item = Office.context.mailbox.item;
     item.body.setSignatureAsync(
       htmlSignature,
       { coercionType: Office.CoercionType.Html },
       function(asyncResult) {
         if (asyncResult.status === Office.AsyncResultStatus.Failed) {
-          console.error('acadon Signatur: setSignatureAsync failed:', asyncResult.error.message);
+          console.error('setSignatureAsync failed:', asyncResult.error.message);
         }
         event.completed();
       }
     );
   } catch (err) {
-    console.error('acadon Signatur: Injection error:', err.message);
+    console.error('Signature injection error:', err.message);
     event.completed();
   }
 }

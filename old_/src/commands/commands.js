@@ -5,18 +5,13 @@ Office.onReady(function(info) {
     // Register event handlers
     Office.actions.associate("onNewMessageCompose", onNewMessageCompose);
     Office.actions.associate("onReplyCompose", onReplyCompose);
-    Office.actions.associate("onForwardCompose", onForwardCompose);
   }
 });
 
 function onNewMessageCompose(event) {
-  injectSignature(event, false, "NewMessage");
+  injectSignature(event, false);
 }
 
 function onReplyCompose(event) {
-  injectSignature(event, true, "Reply (Event)");
-}
-
-function onForwardCompose(event) {
-  injectSignature(event, true, "Forward (Event)");
+  injectSignature(event, true);
 }

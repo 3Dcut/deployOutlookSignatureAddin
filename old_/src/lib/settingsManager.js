@@ -7,9 +7,7 @@ function _defaultPreferences(officeLocation) {
   var lang = resolveLanguage(officeLocation);
   var langLower = lang.toLowerCase();
   return {
-    version: 5,
-    autoInsertEnabled: true,
-
+    version: 4,
     overrides: {
       phone: null,
       jobTitle: null,
@@ -74,10 +72,6 @@ function getPreferencesOrDefaults(officeLocation) {
   if (prefs.version < 4) {
     prefs = _migrateV3toV4(prefs);
   }
-  if (prefs.version < 5) {
-    prefs = _migrateV4toV5(prefs);
-  }
-
 
   // Save if migrated
   if (prefs._migrated) {
@@ -307,18 +301,6 @@ function _migrateV3toV4(v3Prefs) {
 
   return v3Prefs;
 }
-
-// --- Migration v4 -> v5 ---
-
-function _migrateV4toV5(v4Prefs) {
-  if (v4Prefs.autoInsertEnabled === undefined) {
-    v4Prefs.autoInsertEnabled = true;
-  }
-  v4Prefs.version = 5;
-  v4Prefs._migrated = true;
-  return v4Prefs;
-}
-
 
 // --- Migration v2 -> v3 ---
 

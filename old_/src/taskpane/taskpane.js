@@ -35,9 +35,6 @@ async function init() {
       (savedPrefs.overrides && savedPrefs.overrides.jobTitle) || currentUserData.jobTitle || '';
     document.getElementById('phone').value =
       (savedPrefs.overrides && savedPrefs.overrides.phone) || currentUserData.phone || '';
-    
-    // Auto-insert toggle
-    document.getElementById('autoInsert').checked = savedPrefs.autoInsertEnabled !== false;
 
     // Render signature UI
     renderSignatureList();
@@ -665,9 +662,6 @@ function savePreferencesFromForm() {
   if (!savedPrefs.assignments) savedPrefs.assignments = {};
   savedPrefs.assignments.newMessage = document.getElementById('assignNewMessage').value;
   savedPrefs.assignments.reply = document.getElementById('assignReply').value;
-
-  // Save auto-insert setting
-  savedPrefs.autoInsertEnabled = document.getElementById('autoInsert').checked;
 
   savePreferences(savedPrefs, function(success) {
     if (success) {

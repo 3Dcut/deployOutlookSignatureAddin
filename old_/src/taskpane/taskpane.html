@@ -28,11 +28,6 @@
     <!-- Main Form -->
     <div id="main-form" class="panel hidden">
 
-      <!-- Global Insert Button -->
-      <div class="button-row" style="margin-bottom: 16px;">
-        <button id="insert-btn" class="btn btn-primary">Signatur in E-Mail einf&uuml;gen</button>
-      </div>
-
       <!-- Benutzereinstellungen -->
       <details class="form-section accordion" open>
         <summary><h2>Benutzereinstellungen</h2></summary>
@@ -64,10 +59,6 @@
           <div class="field-row stacked">
             <label for="address">Adresse</label>
             <input type="text" id="address" readonly>
-          </div>
-          <div class="field-row toggle-row">
-            <label for="autoInsert">Automatisches Einf&uuml;gen</label>
-            <input type="checkbox" id="autoInsert" checked>
           </div>
           <div class="button-row">
             <button class="btn btn-secondary btn-small save-btn" type="button">Einstellungen speichern</button>
@@ -244,6 +235,9 @@
           </div>
           <div id="preview-container" class="signature-preview">
             <p class="info-text">Vorschau wird geladen...</p>
+          </div>
+          <div class="button-row">
+            <button id="insert-btn" class="btn btn-primary">Signatur in E-Mail einf&uuml;gen</button>
           </div>
         </div>
       </details>
