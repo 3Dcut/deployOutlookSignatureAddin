@@ -1,7 +1,0 @@
-@@FirstName@@ @@LastName@@
-@@JobTitle@@
-@@CompanyName@@
-
-@@TelefonNumber@@
-@@MailAddress@@
-@@WebsiteUrl@@
