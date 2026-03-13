@@ -111,6 +111,7 @@ function _assembleText(beforeParts, rightColumnParts, afterParts) {
 
 async function injectSignature(event, isReply, triggerSource) {
   try {
+    triggerSource = triggerSource || (isReply ? "Reply (Event)" : "NewMessage");
     console.log('acadon Signatur: Triggered by', triggerSource);
 
     // 1. Get current item to check subject for fallback

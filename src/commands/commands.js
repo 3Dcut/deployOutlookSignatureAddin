@@ -4,14 +4,9 @@ Office.onReady(function(info) {
   if (info.host === Office.HostType.Outlook) {
     // Register event handlers
     Office.actions.associate("onNewMessageCompose", onNewMessageCompose);
-    Office.actions.associate("onMessageCompose", onMessageCompose);
   }
 });
 
 function onNewMessageCompose(event) {
-  injectSignature(event, false, "NewMessage");
-}
-
-function onMessageCompose(event) {
-  injectSignature(event, false, "MessageCompose");
+  injectSignature(event, false);
 }

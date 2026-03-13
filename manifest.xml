@@ -116,7 +116,6 @@
             <ExtensionPoint xsi:type="LaunchEvent">
               <LaunchEvents>
                 <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageCompose"/>
-                <LaunchEvent Type="OnMessageCompose" FunctionName="onMessageCompose"/>
               </LaunchEvents>
               <SourceLocation resid="SharedRuntime.Url"/>
             </ExtensionPoint>
