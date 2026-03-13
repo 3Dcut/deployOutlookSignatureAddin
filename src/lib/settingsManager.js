@@ -74,12 +74,10 @@ function getPreferencesOrDefaults(officeLocation) {
   if (prefs.version < 4) {
     prefs = _migrateV3toV4(prefs);
   }
+
   if (prefs.version < 5) {
     prefs = _migrateV4toV5(prefs);
   }
-
-
-  // Save if migrated
   if (prefs._migrated) {
     delete prefs._migrated;
     savePreferences(prefs);
@@ -318,7 +316,6 @@ function _migrateV4toV5(v4Prefs) {
   v4Prefs._migrated = true;
   return v4Prefs;
 }
-
 
 // --- Migration v2 -> v3 ---
 

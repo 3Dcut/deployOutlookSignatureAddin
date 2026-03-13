@@ -35,7 +35,7 @@ async function init() {
       (savedPrefs.overrides && savedPrefs.overrides.jobTitle) || currentUserData.jobTitle || '';
     document.getElementById('phone').value =
       (savedPrefs.overrides && savedPrefs.overrides.phone) || currentUserData.phone || '';
-    
+
     // Auto-insert toggle
     document.getElementById('autoInsert').checked = savedPrefs.autoInsertEnabled !== false;
 
@@ -50,6 +50,14 @@ async function init() {
 
     show('main-form');
     updatePreview();
+
+    // Fallback: Auto-insert if enabled
+    if (savedPrefs.autoInsertEnabled !== false) {
+      setTimeout(function() {
+        console.log("Auto-insert triggered from taskpane load");
+        insertSignatureFromTaskpane();
+      }, 500); // Small delay to ensure items are ready
+    }
   } catch (err) {
     showError('Fehler beim Laden: ' + err.message);
   }
