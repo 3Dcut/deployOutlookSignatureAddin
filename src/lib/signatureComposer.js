@@ -118,7 +118,17 @@ async function injectSignature(event, isReply, triggerSource) {
 
     // Fallback: If not marked as reply but subject looks like one
     if (!isReply) {
-      var subject = item.subject;
+      const subjectPromise = new Promise((resolve) => {
+        item.subject.getAsync((result) => {
+          if (result.status === Office.AsyncResultStatus.Succeeded) {
+            resolve(result.value);
+          } else {
+            resolve("");
+          }
+        });
+      });
+      
+      var subject = await subjectPromise;
       if (subject) {
         var lowerSubj = subject.toLowerCase();
         // Check for common reply/forward prefixes
