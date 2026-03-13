@@ -1,0 +1,2 @@
+﻿Met vriendelijke groeten, Kind regards,
+@@FirstName@@ @@LastName@@
